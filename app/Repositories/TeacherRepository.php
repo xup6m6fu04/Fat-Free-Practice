@@ -19,15 +19,32 @@ class TeacherRepository
         $teacher->created_at = $args['created_at'];
         $teacher->updated_at = $args['updated_at'];
         $teacher->save();
+
+        return $teacher;
     }
 
-    public function getTeacher($args = [])
+    public function editTeacher($id, $args)
+    {
+        $teacher = $this->getTeachers(['id' => $id], 'load');
+
+        $teacher->school_id    = $args['school_id'];
+        $teacher->name         = $args['name'];
+        $teacher->email        = $args['email'];
+        // $teacher->password     = $args['password'];
+        $teacher->enable       = $args['enable'];
+        $teacher->updated_at   = $args['updated_at'];
+        $teacher->save();
+
+        return $teacher;
+    }
+
+    public function getTeachers($args = [], $type = 'find')
     {
         $id            = $args['id']            ?? false;
         $school_id     = $args['school_id']     ?? false;
         $name          = $args['name']          ?? false;
         $email         = $args['email']         ?? false;
-        $password      = $args['password']      ?? false;
+        // $password      = $args['password']      ?? false;
         $enable        = $args['enable']        ?? false;
         $created_start = $args['created_start'] ?? false;
         $created_end   = $args['created_at']    ?? false;
@@ -53,10 +70,6 @@ class TeacherRepository
             $bind_arr[0] = ' AND email=:email ';
             $bind_arr[':email'] = $email;
         }
-        if ($password) {
-            $bind_arr[0] = ' AND password=:password ';
-            $bind_arr[':password'] = $password;
-        }
         if ($enable) {
             $bind_arr[0] = ' AND enable=:enable ';
             $bind_arr[':enable'] = $enable;
@@ -79,7 +92,7 @@ class TeacherRepository
         }
 
         $teacher = new Teacher();
-        return $teacher->find($bind_arr);
+        return $teacher->$type($bind_arr);
 
     }
 }

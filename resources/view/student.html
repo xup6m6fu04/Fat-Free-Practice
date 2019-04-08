@@ -24,7 +24,7 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
-                    <h4 class="modal-title" id="exampleFormModalLabel">新增老師</h4>
+                    <h4 class="modal-title" id="exampleFormModalLabel">新增學生</h4>
                 </div>
                 <div class="modal-body">
                     <div class="row">
@@ -59,12 +59,17 @@
                             <div class="invalid-feedback"></div>
                         </div>
                         <div class="col-xl-12 form-group">
+                            <label class="form-control-label">Subscription</label><br>
+                            <input type="radio" name="subscription" value="Y" checked>  開<br>
+                            <input type="radio" name="subscription" value="N">  關
+                        </div>
+                        <div class="col-xl-12 form-group">
                             <label class="form-control-label">Enable</label><br>
                             <input type="radio" name="enable" value="Y" checked>  開<br>
                             <input type="radio" name="enable" value="N">  關
                         </div>
                         <div class="col-md-12 float-right">
-                            <button id="add_teacher" class="btn btn-primary btn-outline" type="button">確定新增</button>
+                            <button id="add_student" class="btn btn-primary btn-outline" type="button">確定新增</button>
                         </div>
                     </div>
                 </div>
@@ -86,6 +91,7 @@
                         <th>School_id</th>
                         <th>Name</th>
                         <th>Email</th>
+                        <th>Subscription</th>
                         <th>Enable</th>
                         <th>Created_at</th>
                         <th>Updated_at</th>
@@ -97,21 +103,23 @@
                         <th>School_id</th>
                         <th>Name</th>
                         <th>Email</th>
+                        <th>Subscription</th>
                         <th>Enable</th>
                         <th>Created_at</th>
                         <th>Updated_at</th>
                     </tr>
                     </tfoot>
                     <tbody>
-                    <repeat group="{{ @teachers }}" value="{{ @teacher }}">
+                    <repeat group="{{ @students }}" value="{{ @student }}">
                         <tr>
-                            <td>{{ @teacher->id }}</td>
-                            <td>{{ @teacher->school_id }}</td>
-                            <td>{{ @teacher->name }}</td>
-                            <td>{{ @teacher->email }}</td>
-                            <td>{{ @teacher->enable }}</td>
-                            <td>{{ @teacher->created_at }}</td>
-                            <td>{{ @teacher->updated_at }}</td>
+                            <td>{{ @student->id }}</td>
+                            <td>{{ @student->school_id }}</td>
+                            <td>{{ @student->name }}</td>
+                            <td>{{ @student->email }}</td>
+                            <td>{{ @student->subscription }}</td>
+                            <td>{{ @student->enable }}</td>
+                            <td>{{ @student->created_at }}</td>
+                            <td>{{ @student->updated_at }}</td>
                         </tr>
                     </repeat>
                     </tbody>
@@ -141,7 +149,7 @@
         timer: 3000
     });
 
-    $(document).on('click', '#add_teacher', function () {
+    $(document).on('click', '#add_student', function () {
 
         const toast = swal.mixin({
             toast: true,
@@ -151,12 +159,13 @@
         });
 
         let data_arr = {
-            'id'        : $('#id').val(),
-            'school_id' : $('#school_id').val(),
-            'name'      : $('#name').val(),
-            'email'     : $('#email').val(),
-            'password'  : $('#password').val(),
-            'enable'    : $('input[name=enable]:checked').val()
+            'id'           : $('#id').val(),
+            'school_id'    : $('#school_id').val(),
+            'name'         : $('#name').val(),
+            'email'        : $('#email').val(),
+            'password'     : $('#password').val(),
+            'subscription' : $('input[name=subscription]:checked').val(),
+            'enable'       : $('input[name=enable]:checked').val()
         };
 
         for (let key in data_arr) {
@@ -176,15 +185,16 @@
 
         $.ajax({
             type: "post",
-            url: "/api/add-teacher",
+            url: "/api/add-student",
             dataType: "json",
             data: {
-                id:        data_arr.id,
-                school_id: data_arr.school_id,
-                name:      data_arr.name,
-                email:     data_arr.email,
-                password:  data_arr.password,
-                enable:    data_arr.enable
+                id:           data_arr.id,
+                school_id:    data_arr.school_id,
+                name:         data_arr.name,
+                email:        data_arr.email,
+                password:     data_arr.password,
+                subscription: data_arr.subscription,
+                enable:       data_arr.enable
             },
             success: function (result) {
                 if (result.type === 'success') {

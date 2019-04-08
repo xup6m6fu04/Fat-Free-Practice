@@ -13,6 +13,9 @@
    - `/Controllers` : 控制器
    - `/Repository` : 資料庫邏輯
    - `/Service` : 商業邏輯
+   - `/Help` : 常用 function (autoload)
+   - `/Trait` : Trait 撰寫處 (目前放置 Log 管理)
+   
    - 其餘檔案為資料庫 model 
   
 - `/config` : 設定檔撰寫處
@@ -21,7 +24,7 @@
 - `/routes` : 路由設定，分為 web, cli, api
 - `/vendor` : 外部套件
 - `/composer.json` : composer 根據此內容安裝套件
-- `/storage/log` : 存放 Log 的地方 (尚未新增)
+- `/storage/log` : 存放 Log 的地方 
 
 ### 使用套件
 - *Fat-Free*:

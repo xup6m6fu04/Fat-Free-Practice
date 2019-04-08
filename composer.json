@@ -9,6 +9,9 @@
         "ikkez/f3-middleware": "^1.1"
     },
     "autoload": {
+        "files": [
+            "app/Help/function.php"
+        ],
         "psr-4": {
             "App\\": "app/"
         }
