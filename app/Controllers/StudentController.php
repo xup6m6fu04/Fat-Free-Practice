@@ -99,5 +99,35 @@ class StudentController extends Controller
 
     }
 
+    public function getStudentById()
+    {
+        try {
+
+            $id = ($this->f3->get('POST.id')) ?? false;
+
+            $student = $this->studentService->getStudentById($id, 'load');
+
+            if (!$student) {
+                throw new Exception('Student Not Found');
+            }
+
+            return_json([
+                'type' => 'success',
+                'student' => to_Array($student)
+            ]);
+
+        } catch (Exception $ex) {
+
+            $this->Log($ex, Logger::ERROR);
+
+            return_json([
+                'type' => 'error',
+                'message' => $ex->getMessage()
+            ]);
+
+        }
+    }
+
+
 
 }

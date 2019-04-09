@@ -1,18 +1,19 @@
 <?php
 
+
 namespace App\Controllers;
 
-use App\Services\TeacherService;
+use App\Services\SchoolService;
 use App\Traits\LoggerTrait;
 use Carbon\Carbon;
 use Exception;
 use Monolog\Logger;
 
-class TeacherController extends Controller
+class SchoolController extends Controller
 {
     protected $f3;
     protected $db;
-    protected $teacherService;
+    protected $schoolService;
 
     use LoggerTrait;
 
@@ -21,33 +22,30 @@ class TeacherController extends Controller
         global $f3;
         $this->f3 = $f3;
         $this->db = $f3->get('db');
-        $this->teacherService = new TeacherService();
+        $this->schoolService = new SchoolService();
     }
 
-    public function pageTeacher()
+    public function pageSchool()
     {
-        // 取得所有老師資料
-        $this->f3->set('teachers', $this->teacherService->getAllTeachers());
-        return $this->template('teacher.html');
+        // 取得所有學校資料
+        $this->f3->set('schools', $this->schoolService->getAllSchools());
+        return $this->template('school.html');
     }
 
-    public function addTeacher()
+    public function addSchool()
     {
         try {
 
-            // 新增一個老師
+            // 新增一個學校
             $args = [];
-            $args['id']         = ($this->f3->get('POST.id'))        ?? false;
-            $args['school_id']  = ($this->f3->get('POST.school_id')) ?? false;
-            $args['name']       = ($this->f3->get('POST.name'))      ?? false;
-            $args['email']      = ($this->f3->get('POST.email'))     ?? false;
-            $args['password']   = ($this->f3->get('POST.password'))  ?? false;
-            $args['enable']     = ($this->f3->get('POST.enable'))    ?? false;
-            $args['created_at'] = Carbon::now();
-            $args['updated_at'] = Carbon::now();
+            $args['id']           = ($this->f3->get('POST.id'))           ?? false;
+            $args['name']         = ($this->f3->get('POST.name'))         ?? false;
+            $args['enable']       = ($this->f3->get('POST.enable'))       ?? false;
+            $args['created_at']   = Carbon::now();
+            $args['updated_at']   = Carbon::now();
 
             // 新增資料
-            $this->teacherService->addTeacher($args);
+            $this->schoolService->addSchool($args);
 
             return_json(['type' => 'success']);
 
@@ -63,22 +61,19 @@ class TeacherController extends Controller
         }
     }
 
-    public function editTeacher()
+    public function editSchool()
     {
 
         try {
 
-            // 編輯一個老師
+            // 編輯一個學校
             $args = [];
             $args['id']           = ($this->f3->get('POST.id'))           ?? false;
-            $args['school_id']    = ($this->f3->get('POST.school_id'))    ?? false;
             $args['name']         = ($this->f3->get('POST.name'))         ?? false;
-            $args['email']        = ($this->f3->get('POST.email'))        ?? false;
-            // $args['password']     = ($this->f3->get('POST.password'))     ?? false;
             $args['enable']       = ($this->f3->get('POST.enable'))       ?? false;
             $args['updated_at']   = Carbon::now();
 
-            $this->teacherService->editTeacher($args['id'], $args);
+            $this->schoolService->editSchool($args['id'], $args);
 
             return_json([
                 'type' => 'success'
@@ -97,21 +92,21 @@ class TeacherController extends Controller
 
     }
 
-    public function getTeacherById()
+    public function getSchoolById()
     {
         try {
 
             $id = ($this->f3->get('POST.id')) ?? false;
 
-            $teacher = $this->teacherService->getTeacherById($id, 'load');
+            $school = $this->schoolService->getSchoolById($id, 'load');
 
-            if (!$teacher) {
-                throw new Exception('Teacher Not Found');
+            if (!$school) {
+                throw new Exception('School Not Found');
             }
 
             return_json([
                 'type' => 'success',
-                'teacher' => to_Array($teacher)
+                'school' => to_Array($school)
             ]);
 
         } catch (Exception $ex) {
@@ -125,6 +120,4 @@ class TeacherController extends Controller
 
         }
     }
-
-
 }

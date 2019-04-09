@@ -10,17 +10,20 @@ use Carbon\Carbon;
 Trait LoggerTrait
 {
     protected $logger;
+    protected $log_name;
 
     public function Log($log, $log_type = Logger::ERROR)
     {
         // create a log channel
         $this->logger = new Logger('log');
+        $this->log_name = 'log-' . Carbon::now()->toDateString() . '.log';
 
-        if (!file_exists(__DIR__ . '/../../storage/log/log-' . Carbon::now()->toDateString() . '.log')) {
-             file_put_contents(__DIR__ . '/../../storage/log/log-' . Carbon::now()->toDateString() . '.log', '');
+
+        if (!file_exists(__DIR__ . '/../../storage/log/' . $this->log_name)) {
+             file_put_contents(__DIR__ . '/../../storage/log/' . $this->log_name, '');
         }
 
-        $this->logger->pushHandler(new StreamHandler(__DIR__ . '/../../storage/log/log-' . Carbon::now()->toDateString() . '.log', Logger::DEBUG));
+        $this->logger->pushHandler(new StreamHandler(__DIR__ . '/../../storage/log/' . $this->log_name, Logger::DEBUG));
 
         switch ($log_type) {
             case Logger::DEBUG :

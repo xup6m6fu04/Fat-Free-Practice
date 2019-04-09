@@ -25,7 +25,7 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
-                    <h4 class="modal-title" id="AddModalLabel">新增學生</h4>
+                    <h4 class="modal-title" id="AddModalLabel">新增學校</h4>
                 </div>
                 <div class="modal-body">
                     <div class="row">
@@ -36,33 +36,10 @@
                             <div class="invalid-feedback"></div>
                         </div>
                         <div class="col-xl-12 form-group">
-                            <label class="form-control-label" for="school_id">School_id</label>
-                            <input type="text" class="form-control" id="school_id" name="school_id"
-                                   placeholder="school_id" required="">
-                            <div class="invalid-feedback"></div>
-                        </div>
-                        <div class="col-xl-12 form-group">
                             <label class="form-control-label" for="name">Name</label>
                             <input type="text" class="form-control" id="name" name="name"
                                    placeholder="name" required="">
                             <div class="invalid-feedback"></div>
-                        </div>
-                        <div class="col-xl-12 form-group">
-                            <label class="form-control-label" for="email">Email</label>
-                            <input type="email" class="form-control" id="email" name="email"
-                                   placeholder="email" required="">
-                            <div class="invalid-feedback"></div>
-                        </div>
-                        <div class="col-xl-12 form-group">
-                            <label class="form-control-label" for="password">Password</label>
-                            <input type="password" class="form-control" id="password" name="password"
-                                   placeholder="password" required="">
-                            <div class="invalid-feedback"></div>
-                        </div>
-                        <div class="col-xl-12 form-group">
-                            <label class="form-control-label">Subscription</label><br>
-                            <input type="radio" name="subscription" value="Y" checked>  開<br>
-                            <input type="radio" name="subscription" value="N">  關
                         </div>
                         <div class="col-xl-12 form-group">
                             <label class="form-control-label">Enable</label><br>
@@ -70,7 +47,7 @@
                             <input type="radio" name="enable" value="N">  關
                         </div>
                         <div class="col-md-12 float-right">
-                            <button id="add_student" class="btn btn-primary btn-outline" type="button">確定新增</button>
+                            <button id="add_school" class="btn btn-primary btn-outline" type="button">確定新增</button>
                         </div>
                     </div>
                 </div>
@@ -87,16 +64,10 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
-                    <h4 class="modal-title" id="editModalLabel">編輯學生</h4>
+                    <h4 class="modal-title" id="editModalLabel">編輯學校</h4>
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-xl-12 form-group">
-                            <label class="form-control-label" for="school_id">School_id</label>
-                            <input type="text" class="form-control" id="edit_school_id" name="school_id"
-                                   placeholder="school_id" required="">
-                            <div class="invalid-feedback"></div>
-                        </div>
                         <div class="col-xl-12 form-group">
                             <label class="form-control-label" for="name">Name</label>
                             <input type="text" class="form-control" id="edit_name" name="name"
@@ -104,23 +75,12 @@
                             <div class="invalid-feedback"></div>
                         </div>
                         <div class="col-xl-12 form-group">
-                            <label class="form-control-label" for="email">Email</label>
-                            <input type="email" class="form-control" id="edit_email" name="email"
-                                   placeholder="email" required="">
-                            <div class="invalid-feedback"></div>
-                        </div>
-                        <div class="col-xl-12 form-group">
-                            <label class="form-control-label">Subscription</label><br>
-                            <input type="radio" name="edit_subscription" value="Y" checked>  開<br>
-                            <input type="radio" name="edit_subscription" value="N">  關
-                        </div>
-                        <div class="col-xl-12 form-group">
                             <label class="form-control-label">Enable</label><br>
                             <input type="radio" name="edit_enable" value="Y" checked>  開<br>
                             <input type="radio" name="edit_enable" value="N">  關
                         </div>
                         <div class="col-md-12 float-right">
-                            <button id="edit_student" class="btn btn-primary btn-outline" type="button">確定修改</button>
+                            <button id="edit_school" class="btn btn-primary btn-outline" type="button">確定修改</button>
                         </div>
                     </div>
                 </div>
@@ -139,10 +99,7 @@
                     <thead>
                     <tr>
                         <th>ID</th>
-                        <th>School_id</th>
                         <th>Name</th>
-                        <th>Email</th>
-                        <th>Subscription</th>
                         <th>Enable</th>
                         <th>Created_at</th>
                         <th>Updated_at</th>
@@ -152,10 +109,7 @@
                     <tfoot>
                     <tr>
                         <th>ID</th>
-                        <th>School_id</th>
                         <th>Name</th>
-                        <th>Email</th>
-                        <th>Subscription</th>
                         <th>Enable</th>
                         <th>Created_at</th>
                         <th>Updated_at</th>
@@ -163,17 +117,14 @@
                     </tr>
                     </tfoot>
                     <tbody>
-                    <repeat group="{{ @students }}" value="{{ @student }}">
+                    <repeat group="{{ @schools }}" value="{{ @school }}">
                         <tr>
-                            <td>{{ @student->id }}</td>
-                            <td>{{ @student->school_id }}</td>
-                            <td>{{ @student->name }}</td>
-                            <td>{{ @student->email }}</td>
-                            <td>{{ @student->subscription }}</td>
-                            <td>{{ @student->enable }}</td>
-                            <td>{{ @student->created_at }}</td>
-                            <td>{{ @student->updated_at }}</td>
-                            <td><button data-id="{{ @student->id }}" id="edit_student_modal" data-target="#editModal" data-toggle="modal" type="button" class="btn btn-floating btn-success btn-sm"><i class="icon wb-pencil" aria-hidden="true"></i></button></td>
+                            <td>{{ @school->id }}</td>
+                            <td>{{ @school->name }}</td>
+                            <td>{{ @school->enable }}</td>
+                            <td>{{ @school->created_at }}</td>
+                            <td>{{ @school->updated_at }}</td>
+                            <td><button data-id="{{ @school->id }}" id="edit_school_modal" data-target="#editModal" data-toggle="modal" type="button" class="btn btn-floating btn-success btn-sm"><i class="icon wb-pencil" aria-hidden="true"></i></button></td>
                         </tr>
                     </repeat>
                     </tbody>
@@ -204,11 +155,11 @@
     });
 
     // 編輯學生按鈕點擊 , Ajax 撈資料渲染到 Html
-    $(document).on('click', '#edit_student_modal', function(){
+    $(document).on('click', '#edit_school_modal', function(){
         let id = $(this).data('id');
         $.ajax({
             type: "post",
-            url: "/api/get-student-by-id",
+            url: "/api/get-school-by-id",
             dataType: "json",
             data: {
                 id: id,
@@ -216,23 +167,13 @@
             success: function (result) {
                 if (result.type === 'success') {
 
-                    $('#edit_school_id').val(result.student.school_id);
-                    $('#edit_name').val(result.student.name);
-                    $('#edit_email').val(result.student.email);
-                    $('#edit_student').attr('data-id', result.student.id);
+                    $('#edit_school').attr('data-id', result.school.id);
+                    $('#edit_name').val(result.school.name);
 
                     $('input[name=edit_enable]').each(function(){
                         let _this = $(this);
                         _this.prop("checked", false);
-                        if (_this.val() === result.student.enable) {
-                            _this.prop("checked", true);
-                        }
-                    });
-
-                    $('input[name=edit_subscription]').each(function(){
-                        let _this = $(this);
-                        _this.prop("checked", false);
-                        if (_this.val() === result.student.subscription) {
+                        if (_this.val() === result.school.enable) {
                             _this.prop("checked", true);
                         }
                     });
@@ -253,17 +194,16 @@
         });
     });
 
-    // 確定編輯學生
-    $(document).on('click', '#edit_student', function () {
+    // 確定編輯學校
+    $(document).on('click', '#edit_school', function () {
 
         let edit_data_arr = {
             'edit_id' : $(this).data('id'),
-            'edit_school_id' : $('#edit_school_id').val(),
             'edit_name' : $('#edit_name').val(),
-            'edit_email' : $('#edit_email').val(),
             'edit_enable' : $('input[name=edit_enable]:checked').val(),
-            'edit_subscription' : $('input[name=edit_subscription]:checked').val()
         };
+
+        console.log(edit_data_arr);
 
         for (let key in edit_data_arr) {
 
@@ -282,15 +222,12 @@
 
         $.ajax({
             type: "post",
-            url: "/api/edit-student",
+            url: "/api/edit-school",
             dataType: "json",
             data: {
                 id: edit_data_arr.edit_id,
-                school_id: edit_data_arr.edit_school_id,
                 name: edit_data_arr.edit_name,
-                email: edit_data_arr.edit_email,
                 enable: edit_data_arr.edit_enable,
-                subscription: edit_data_arr.edit_subscription,
             },
             success: function (result) {
                 if (result.type === 'success') {
@@ -320,15 +257,11 @@
         });
     });
 
-    $(document).on('click', '#add_student', function () {
+    $(document).on('click', '#add_school', function () {
 
         let data_arr = {
             'id'           : $('#id').val(),
-            'school_id'    : $('#school_id').val(),
             'name'         : $('#name').val(),
-            'email'        : $('#email').val(),
-            'password'     : $('#password').val(),
-            'subscription' : $('input[name=subscription]:checked').val(),
             'enable'       : $('input[name=enable]:checked').val()
         };
 
@@ -349,15 +282,11 @@
 
         $.ajax({
             type: "post",
-            url: "/api/add-student",
+            url: "/api/add-school",
             dataType: "json",
             data: {
                 id:           data_arr.id,
-                school_id:    data_arr.school_id,
                 name:         data_arr.name,
-                email:        data_arr.email,
-                password:     data_arr.password,
-                subscription: data_arr.subscription,
                 enable:       data_arr.enable
             },
             success: function (result) {

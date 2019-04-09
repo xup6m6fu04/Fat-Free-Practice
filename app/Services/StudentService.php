@@ -20,9 +20,14 @@ class StudentService
         return $this->studentRepository->getStudents();
     }
 
-    public function getStudentById($id)
+    public function getStudentById($id, $type = 'load')
     {
-        return $this->studentRepository->getStudents(['id' => $id]);
+        if (!$id) {
+            throw new Exception('ID is empty');
+        }
+
+
+        return $this->studentRepository->getStudents(['id' => $id], $type);
     }
 
     public function addStudent($args)

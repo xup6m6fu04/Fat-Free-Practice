@@ -20,9 +20,13 @@ class TeacherService
         return $this->teacherRepository->getTeachers();
     }
 
-    public function getTeacherById($id)
+    public function getTeacherById($id, $type = 'load')
     {
-        return $this->teacherRepository->getTeachers(['id' => $id]);
+        if (!$id) {
+            throw new Exception('ID is empty');
+        }
+
+        return $this->teacherRepository->getTeachers(['id' => $id], $type);
     }
 
     public function addTeacher($args)
@@ -36,6 +40,9 @@ class TeacherService
 
             // TODO 檢查格式
         }
+
+        // 密碼加密
+        $args['password'] = password_hash($args['password'], PASSWORD_BCRYPT);
 
         return $this->teacherRepository->addTeacher($args);
     }

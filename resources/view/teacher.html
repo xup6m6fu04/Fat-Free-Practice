@@ -11,12 +11,13 @@
 
     <div class="page-header">
         <div class="page-header-actions">
-            <button type="button" data-target="#exampleFormModal" data-toggle="modal"
+            <button type="button" data-target="#addModal" data-toggle="modal"
                     class="btn btn-outline btn-primary"><i class="icon wb-plus" aria-hidden="true"></i> Add
             </button>
         </div>
     </div>
-    <div class="modal fade" id="exampleFormModal" aria-labelledby="exampleFormModalLabel" role="dialog" tabindex="-1"
+    <!--  Add Modal  -->
+    <div class="modal fade" id="addModal" aria-labelledby="addModalLabel" role="dialog" tabindex="-1"
          style="display: none;" aria-hidden="true">
         <div class="modal-dialog modal-simple">
             <form class="modal-content">
@@ -24,7 +25,7 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
-                    <h4 class="modal-title" id="exampleFormModalLabel">新增老師</h4>
+                    <h4 class="modal-title" id="addModalLabel">新增老師</h4>
                 </div>
                 <div class="modal-body">
                     <div class="row">
@@ -71,6 +72,52 @@
             </form>
         </div>
     </div>
+
+    <!--  Edit Modal  -->
+    <div class="modal fade" id="editModal" aria-labelledby="editModalLabel" role="dialog" tabindex="-1"
+         style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-simple">
+            <form class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title" id="editModalLabel">編輯老師</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xl-12 form-group">
+                            <label class="form-control-label" for="school_id">School_id</label>
+                            <input type="text" class="form-control" id="edit_school_id" name="school_id"
+                                   placeholder="school_id" required="">
+                            <div class="invalid-feedback"></div>
+                        </div>
+                        <div class="col-xl-12 form-group">
+                            <label class="form-control-label" for="name">Name</label>
+                            <input type="text" class="form-control" id="edit_name" name="name"
+                                   placeholder="name" required="">
+                            <div class="invalid-feedback"></div>
+                        </div>
+                        <div class="col-xl-12 form-group">
+                            <label class="form-control-label" for="email">Email</label>
+                            <input type="email" class="form-control" id="edit_email" name="email"
+                                   placeholder="email" required="">
+                            <div class="invalid-feedback"></div>
+                        </div>
+                        <div class="col-xl-12 form-group">
+                            <label class="form-control-label">Enable</label><br>
+                            <input type="radio" name="edit_enable" value="Y" checked>  開<br>
+                            <input type="radio" name="edit_enable" value="N">  關
+                        </div>
+                        <div class="col-md-12 float-right">
+                            <button id="edit_teacher" class="btn btn-primary btn-outline" type="button">確定修改</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <div class="page-content">
         <!-- Panel Basic -->
         <div class="panel">
@@ -89,6 +136,7 @@
                         <th>Enable</th>
                         <th>Created_at</th>
                         <th>Updated_at</th>
+                        <th>Edit</th>
                     </tr>
                     </thead>
                     <tfoot>
@@ -100,6 +148,7 @@
                         <th>Enable</th>
                         <th>Created_at</th>
                         <th>Updated_at</th>
+                        <th>Edit</th>
                     </tr>
                     </tfoot>
                     <tbody>
@@ -112,6 +161,7 @@
                             <td>{{ @teacher->enable }}</td>
                             <td>{{ @teacher->created_at }}</td>
                             <td>{{ @teacher->updated_at }}</td>
+                            <td><button data-id="{{ @teacher->id }}" id="edit_teacher_modal" data-target="#editModal" data-toggle="modal" type="button" class="btn btn-floating btn-success btn-sm"><i class="icon wb-pencil" aria-hidden="true"></i></button></td>
                         </tr>
                     </repeat>
                     </tbody>
@@ -134,6 +184,7 @@
 
 <script>
 
+    // 定義彈出提示
     const toast = swal.mixin({
         toast: true,
         position: 'center',
@@ -141,14 +192,115 @@
         timer: 3000
     });
 
-    $(document).on('click', '#add_teacher', function () {
+    // 編輯老師按鈕點擊 , Ajax 撈資料渲染到 Html
+    $(document).on('click', '#edit_teacher_modal', function(){
+        let id = $(this).data('id');
+        $.ajax({
+            type: "post",
+            url: "/api/get-teacher-by-id",
+            dataType: "json",
+            data: {
+                id: id,
+            },
+            success: function (result) {
+                if (result.type === 'success') {
 
-        const toast = swal.mixin({
-            toast: true,
-            position: 'center',
-            showConfirmButton: false,
-            timer: 3000
+                    $('#edit_school_id').val(result.teacher.school_id);
+                    $('#edit_name').val(result.teacher.name);
+                    $('#edit_email').val(result.teacher.email);
+                    $('#edit_teacher').attr('data-id', result.teacher.id);
+
+                    $('input[name=edit_enable]').each(function(){
+                        let _this = $(this);
+                        _this.prop("checked", false);
+                        if (_this.val() === result.teacher.enable) {
+                            _this.prop("checked", true);
+                        }
+                    });
+
+                } else if (result.type === 'error') {
+                    toast({
+                        type: 'error',
+                        title: result.message
+                    })
+                }
+            },
+            error: function () {
+                toast({
+                    type: 'error',
+                    title: '系統異常'
+                })
+            }
         });
+    });
+
+    // 確定編輯老師
+    $(document).on('click', '#edit_teacher', function () {
+
+        let edit_data_arr = {
+            'edit_id' : $(this).data('id'),
+            'edit_school_id' : $('#edit_school_id').val(),
+            'edit_name' : $('#edit_name').val(),
+            'edit_email' : $('#edit_email').val(),
+            'edit_enable' : $('input[name=edit_enable]:checked').val()
+        };
+
+        for (let key in edit_data_arr) {
+
+            // TODO 初步驗證格式
+
+            if (edit_data_arr[key].length <= 0) {
+                $('#' + key).addClass('is-invalid');
+                $('#' + key).next().text('此欄位必須填寫');
+                return false;
+            } else {
+                $('#' + key).removeClass('is-invalid');
+                $('#' + key).addClass('is-valid');
+                $('#' + key).next().text('');
+            }
+        }
+
+        $.ajax({
+            type: "post",
+            url: "/api/edit-teacher",
+            dataType: "json",
+            data: {
+                id: edit_data_arr.edit_id,
+                school_id: edit_data_arr.edit_school_id,
+                name: edit_data_arr.edit_name,
+                email: edit_data_arr.edit_email,
+                enable: edit_data_arr.edit_enable,
+            },
+            success: function (result) {
+                if (result.type === 'success') {
+
+                    if (result.type === 'success') {
+                        location.reload();
+                    } else if (result.type === 'error') {
+                        toast({
+                            type: 'error',
+                            title: result.message
+                        })
+                    }
+
+                } else if (result.type === 'error') {
+                    toast({
+                        type: 'error',
+                        title: result.message
+                    })
+                }
+            },
+            error: function () {
+                toast({
+                    type: 'error',
+                    title: '系統異常'
+                })
+            }
+        });
+    });
+
+    // 新增老師按鈕點擊
+    $(document).on('click', '#add_teacher', function () {
 
         let data_arr = {
             'id'        : $('#id').val(),
