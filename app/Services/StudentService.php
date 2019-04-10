@@ -20,12 +20,22 @@ class StudentService
         return $this->studentRepository->getStudents();
     }
 
+    public function countAllStudents()
+    {
+        return $this->studentRepository->getStudents([], 'count');
+    }
+
+    public function getStudentByParams($args)
+    {
+        // TODO : 好像該做點什麼
+        return $this->studentRepository->getStudents($args);
+    }
+
     public function getStudentById($id, $type = 'load')
     {
         if (!$id) {
             throw new Exception('ID is empty');
         }
-
 
         return $this->studentRepository->getStudents(['id' => $id], $type);
     }
@@ -34,17 +44,14 @@ class StudentService
     {
         // 檢查內容
         foreach ($args as $key => $arg) {
-
             if (!$arg) {
                 throw new Exception($key . ' 為必填');
             }
-
             // TODO 檢查格式
         }
 
         // 密碼加密
         $args['password'] = password_hash($args['password'], PASSWORD_BCRYPT);
-
         return $this->studentRepository->addStudent($args);
     }
 
@@ -62,11 +69,9 @@ class StudentService
 
         // 檢查內容
         foreach ($args as $key => $arg) {
-
             if (!$arg) {
                 throw new Exception($key . ' 為必填');
             }
-
             // TODO 檢查格式
         }
 

@@ -33,17 +33,14 @@ class TeacherService
     {
         // 檢查內容
         foreach ($args as $key => $arg) {
-
             if (!$arg) {
                 throw new Exception($key . ' 為必填');
             }
-
             // TODO 檢查格式
         }
 
         // 密碼加密
         $args['password'] = password_hash($args['password'], PASSWORD_BCRYPT);
-
         return $this->teacherRepository->addTeacher($args);
     }
 
@@ -61,11 +58,9 @@ class TeacherService
 
         // 檢查內容
         foreach ($args as $key => $arg) {
-
             if (!$arg) {
                 throw new Exception($key . ' 為必填');
             }
-
             // TODO 檢查格式
         }
 

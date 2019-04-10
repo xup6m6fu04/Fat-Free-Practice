@@ -59,7 +59,6 @@ class SeedCommand
                     'name'         => 'NAME' . $this->randString(10, true),
                     'email'        => $this->randString(10, false) . '@gmail.com',
                     'password'     => password_hash('password', PASSWORD_BCRYPT),
-                    'subscription' => 'Y',
                     'enable'       => 'Y',
                     'created_at'   => Carbon::now(),
                     'updated_at'   => Carbon::now(),

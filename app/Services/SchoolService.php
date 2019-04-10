@@ -26,7 +26,6 @@ class SchoolService
             throw new Exception('ID is empty');
         }
 
-
         return $this->schoolRepository->getSchools(['id' => $id], $type);
     }
 
@@ -34,11 +33,9 @@ class SchoolService
     {
         // 檢查內容
         foreach ($args as $key => $arg) {
-
             if (!$arg) {
                 throw new Exception($key . ' 為必填');
             }
-
             // TODO 檢查格式
         }
 
@@ -59,11 +56,9 @@ class SchoolService
 
         // 檢查內容
         foreach ($args as $key => $arg) {
-
             if (!$arg) {
                 throw new Exception($key . ' 為必填');
             }
-
             // TODO 檢查格式
         }
 

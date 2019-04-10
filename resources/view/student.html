@@ -1,24 +1,21 @@
-<include href="layouts/header.html"/>
+<include href="layouts/header.html" />
+
 <body class="animsition">
 <!--[if lt IE 8]>
 <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
     your browser</a> to improve your experience.</p>
 <![endif]-->
-<include href="layouts/site.html"/>
+<include href="layouts/site.html" />
 
 <!-- Page -->
 <div class="page">
 
     <div class="page-header">
         <div class="page-header-actions">
-            <button type="button" data-target="#AddModal" data-toggle="modal"
-                    class="btn btn-outline btn-primary"><i class="icon wb-plus" aria-hidden="true"></i> Add
-            </button>
         </div>
     </div>
     <!-- Add Modal -->
-    <div class="modal fade" id="AddModal" aria-labelledby="AddModalLabel" role="dialog" tabindex="-1"
-         style="display: none;" aria-hidden="true">
+    <div class="modal fade" id="AddModal" aria-labelledby="AddModalLabel" role="dialog" tabindex="-1" style="display: none;" aria-hidden="true">
         <div class="modal-dialog modal-simple">
             <form class="modal-content">
                 <div class="modal-header">
@@ -31,43 +28,35 @@
                     <div class="row">
                         <div class="col-xl-12 form-group">
                             <label class="form-control-label" for="id">ID</label>
-                            <input type="text" class="form-control" id="id" name="id"
-                                   placeholder="id" required="">
+                            <input type="text" class="form-control" id="id" name="id" placeholder="id" required="">
                             <div class="invalid-feedback"></div>
                         </div>
                         <div class="col-xl-12 form-group">
                             <label class="form-control-label" for="school_id">School_id</label>
-                            <input type="text" class="form-control" id="school_id" name="school_id"
-                                   placeholder="school_id" required="">
+                            <input type="text" class="form-control" id="school_id" name="school_id" placeholder="school_id" required="">
                             <div class="invalid-feedback"></div>
                         </div>
                         <div class="col-xl-12 form-group">
                             <label class="form-control-label" for="name">Name</label>
-                            <input type="text" class="form-control" id="name" name="name"
-                                   placeholder="name" required="">
+                            <input type="text" class="form-control" id="name" name="name" placeholder="name" required="">
                             <div class="invalid-feedback"></div>
                         </div>
                         <div class="col-xl-12 form-group">
                             <label class="form-control-label" for="email">Email</label>
-                            <input type="email" class="form-control" id="email" name="email"
-                                   placeholder="email" required="">
+                            <input type="email" class="form-control" id="email" name="email" placeholder="email" required="">
                             <div class="invalid-feedback"></div>
                         </div>
                         <div class="col-xl-12 form-group">
                             <label class="form-control-label" for="password">Password</label>
-                            <input type="password" class="form-control" id="password" name="password"
-                                   placeholder="password" required="">
+                            <input type="password" class="form-control" id="password" name="password" placeholder="password" required="">
                             <div class="invalid-feedback"></div>
                         </div>
                         <div class="col-xl-12 form-group">
-                            <label class="form-control-label">Subscription</label><br>
-                            <input type="radio" name="subscription" value="Y" checked>  開<br>
-                            <input type="radio" name="subscription" value="N">  關
-                        </div>
-                        <div class="col-xl-12 form-group">
-                            <label class="form-control-label">Enable</label><br>
-                            <input type="radio" name="enable" value="Y" checked>  開<br>
-                            <input type="radio" name="enable" value="N">  關
+                            <label class="form-control-label">Enable</label>
+                            <br>
+                            <input type="radio" name="enable" value="Y" checked> 開
+                            <br>
+                            <input type="radio" name="enable" value="N"> 關
                         </div>
                         <div class="col-md-12 float-right">
                             <button id="add_student" class="btn btn-primary btn-outline" type="button">確定新增</button>
@@ -79,8 +68,7 @@
     </div>
 
     <!--  Edit Modal  -->
-    <div class="modal fade" id="editModal" aria-labelledby="editModalLabel" role="dialog" tabindex="-1"
-         style="display: none;" aria-hidden="true">
+    <div class="modal fade" id="editModal" aria-labelledby="editModalLabel" role="dialog" tabindex="-1" style="display: none;" aria-hidden="true">
         <div class="modal-dialog modal-simple">
             <form class="modal-content">
                 <div class="modal-header">
@@ -93,31 +81,25 @@
                     <div class="row">
                         <div class="col-xl-12 form-group">
                             <label class="form-control-label" for="school_id">School_id</label>
-                            <input type="text" class="form-control" id="edit_school_id" name="school_id"
-                                   placeholder="school_id" required="">
+                            <input type="text" class="form-control" id="edit_school_id" name="school_id" placeholder="school_id" required="">
                             <div class="invalid-feedback"></div>
                         </div>
                         <div class="col-xl-12 form-group">
                             <label class="form-control-label" for="name">Name</label>
-                            <input type="text" class="form-control" id="edit_name" name="name"
-                                   placeholder="name" required="">
+                            <input type="text" class="form-control" id="edit_name" name="name" placeholder="name" required="">
                             <div class="invalid-feedback"></div>
                         </div>
                         <div class="col-xl-12 form-group">
                             <label class="form-control-label" for="email">Email</label>
-                            <input type="email" class="form-control" id="edit_email" name="email"
-                                   placeholder="email" required="">
+                            <input type="email" class="form-control" id="edit_email" name="email" placeholder="email" required="">
                             <div class="invalid-feedback"></div>
                         </div>
                         <div class="col-xl-12 form-group">
-                            <label class="form-control-label">Subscription</label><br>
-                            <input type="radio" name="edit_subscription" value="Y" checked>  開<br>
-                            <input type="radio" name="edit_subscription" value="N">  關
-                        </div>
-                        <div class="col-xl-12 form-group">
-                            <label class="form-control-label">Enable</label><br>
-                            <input type="radio" name="edit_enable" value="Y" checked>  開<br>
-                            <input type="radio" name="edit_enable" value="N">  關
+                            <label class="form-control-label">Enable</label>
+                            <br>
+                            <input type="radio" name="edit_enable" value="Y" checked> 開
+                            <br>
+                            <input type="radio" name="edit_enable" value="N"> 關
                         </div>
                         <div class="col-md-12 float-right">
                             <button id="edit_student" class="btn btn-primary btn-outline" type="button">確定修改</button>
@@ -129,55 +111,120 @@
     </div>
     <div class="page-content">
         <!-- Panel Basic -->
+
         <div class="panel">
             <header class="panel-heading">
-                <div class="panel-actions"></div>
-                <h3 class="panel-title">Basic</h3>
+                <h3 class="panel-title">Student</h3>
             </header>
             <div class="panel-body">
-                <table class="table table-hover dataTable table-striped w-full" data-plugin="dataTable">
-                    <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>School_id</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Subscription</th>
-                        <th>Enable</th>
-                        <th>Created_at</th>
-                        <th>Updated_at</th>
-                        <th>Edit</th>
-                    </tr>
-                    </thead>
-                    <tfoot>
-                    <tr>
-                        <th>ID</th>
-                        <th>School_id</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Subscription</th>
-                        <th>Enable</th>
-                        <th>Created_at</th>
-                        <th>Updated_at</th>
-                        <th>Edit</th>
-                    </tr>
-                    </tfoot>
-                    <tbody>
-                    <repeat group="{{ @students }}" value="{{ @student }}">
-                        <tr>
-                            <td>{{ @student->id }}</td>
-                            <td>{{ @student->school_id }}</td>
-                            <td>{{ @student->name }}</td>
-                            <td>{{ @student->email }}</td>
-                            <td>{{ @student->subscription }}</td>
-                            <td>{{ @student->enable }}</td>
-                            <td>{{ @student->created_at }}</td>
-                            <td>{{ @student->updated_at }}</td>
-                            <td><button data-id="{{ @student->id }}" id="edit_student_modal" data-target="#editModal" data-toggle="modal" type="button" class="btn btn-floating btn-success btn-sm"><i class="icon wb-pencil" aria-hidden="true"></i></button></td>
-                        </tr>
-                    </repeat>
-                    </tbody>
-                </table>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-15">
+                            <button data-target="#AddModal" data-toggle="modal" class="btn btn-outline btn-primary" type="button">
+                                <i class="icon wb-plus" aria-hidden="true"></i> Add Student
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div id="exampleAddRow_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4 no-footer">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6">
+                            <div class="dataTables_length" id="exampleAddRow_length">
+                                <label>
+                                    <select name="exampleAddRow_length" id="row_length" aria-controls="exampleAddRow" class="form-control form-control-sm" style="width: 100px">
+                                        <loop from="{{ @i=20 }}" to="{{ @i <= 100 }}" step="{{ @i+=20 }}">
+                                            <check if="{{ @i==@page['per'] }}">
+                                                <true><option value="{{ @i }}" selected>{{ @i }}</option></true>
+                                                <false><option value="{{ @i }}">{{ @i }}</option></false>
+                                            </check>
+                                            </li>
+                                        </loop>
+                                    </select>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <div id="exampleAddRow_filter" class="dataTables_filter">
+                                <label>
+                                    <input type="search" class="form-control form-control-sm" placeholder="Search.." aria-controls="exampleAddRow">
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <table class="table table-bordered table-hover table-striped dataTable no-footer" cellspacing="0" id="exampleAddRow" role="grid" aria-describedby="exampleAddRow_info">
+                                <thead>
+                                <tr role="row">
+                                    <th>ID</th>
+                                    <th>School_id</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Enable</th>
+                                    <th>Created_at</th>
+                                    <th>Updated_at</th>
+                                    <th>Edit</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <repeat group="{{ @students }}" value="{{ @student }}">
+                                    <tr>
+                                        <td>{{ @student->id }}</td>
+                                        <td>{{ @student->school_id }}</td>
+                                        <td>{{ @student->name }}</td>
+                                        <td>{{ @student->email }}</td>
+                                        <td>{{ @student->enable }}</td>
+                                        <td>{{ @student->created_at }}</td>
+                                        <td>{{ @student->updated_at }}</td>
+                                        <td>
+                                            <a href="javascript:void(0)" data-id="{{ @student->id }}" id="edit_student_modal" data-target="#editModal" data-toggle="modal" class="btn btn-sm btn-icon btn-pure btn-default on-default edit-row" data-toggle="tooltip" data-original-title="Edit"><i class="icon wb-edit" aria-hidden="true"></i></a>
+                                            <a href="javascript:void(0)" class="btn btn-sm btn-icon btn-pure btn-default on-default remove-row" data-toggle="tooltip" data-original-title="Remove"><i class="icon wb-trash" aria-hidden="true"></i></a>
+                                        </td>
+                                    </tr>
+                                </repeat>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-5">
+                            <div class="dataTables_info" id="exampleAddRow_info" role="status" aria-live="polite">
+                                Showing {{ @page['sql_limit_start'] + 1 }} to
+                                <check if="{{ (@page['sql_limit_start'] + @page['sql_limit_end']) >= @page['data_nums'] }}">
+                                    <true>{{ @page['data_nums'] }}</true>
+                                    <false>{{ @page['sql_limit_start'] + @page['sql_limit_end'] }}</false>
+                                </check>
+                                of {{ @page['data_nums'] }} entries
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-7">
+                            <div class="dataTables_paginate paging_simple_numbers" id="exampleAddRow_paginate">
+                                <ul class="pagination">
+                                    <check if="{{ @page['page']==1 }}">
+                                        <true><li class="paginate_button page-item previous disabled"></true>
+                                        <false><li class="paginate_button page-item previous" ></false>
+                                    </check>
+                                        <a href="javascript:void(0)"  data-page="{{ @page['page'] - 1 }}" aria-controls="exampleAddRow" data-dt-idx="0" tabindex="0" class="page-link change-page">Previous</a>
+                                    </li>
+                                    <loop from="{{ @i=1 }}" to="{{ @i <= @page['total_pages'] }}" step="{{ @i++ }}">
+                                        <check if="{{ @i==@page['page'] }}">
+                                            <true><li class="paginate_button page-item active"></true>
+                                            <false><li class="paginate_button page-item"></false>
+                                        </check>
+                                            <a href="javascript:void(0)" data-page="{{ @i }}"  aria-controls="exampleAddRow" data-dt-idx="1" tabindex="0" class="page-link change-page">{{ @i }}</a>
+                                        </li>
+                                    </loop>
+                                    <check if="{{ @page['page'] >= @page['total_pages'] }}">
+                                        <true><li class="paginate_button page-item next disabled"></true>
+                                        <false><li class="paginate_button page-item next"></false>
+                                    </check>
+                                        <a href="javascript:void(0)" data-page="{{ @page['page'] + 1 }}" aria-controls="exampleAddRow" data-dt-idx="5" tabindex="0" class="page-link change-page">Next</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <!-- End Panel Basic -->
@@ -229,14 +276,6 @@
                         }
                     });
 
-                    $('input[name=edit_subscription]').each(function(){
-                        let _this = $(this);
-                        _this.prop("checked", false);
-                        if (_this.val() === result.student.subscription) {
-                            _this.prop("checked", true);
-                        }
-                    });
-
                 } else if (result.type === 'error') {
                     toast({
                         type: 'error',
@@ -262,7 +301,6 @@
             'edit_name' : $('#edit_name').val(),
             'edit_email' : $('#edit_email').val(),
             'edit_enable' : $('input[name=edit_enable]:checked').val(),
-            'edit_subscription' : $('input[name=edit_subscription]:checked').val()
         };
 
         for (let key in edit_data_arr) {
@@ -290,7 +328,6 @@
                 name: edit_data_arr.edit_name,
                 email: edit_data_arr.edit_email,
                 enable: edit_data_arr.edit_enable,
-                subscription: edit_data_arr.edit_subscription,
             },
             success: function (result) {
                 if (result.type === 'success') {
@@ -328,7 +365,6 @@
             'name'         : $('#name').val(),
             'email'        : $('#email').val(),
             'password'     : $('#password').val(),
-            'subscription' : $('input[name=subscription]:checked').val(),
             'enable'       : $('input[name=enable]:checked').val()
         };
 
@@ -357,7 +393,6 @@
                 name:         data_arr.name,
                 email:        data_arr.email,
                 password:     data_arr.password,
-                subscription: data_arr.subscription,
                 enable:       data_arr.enable
             },
             success: function (result) {
@@ -378,4 +413,22 @@
             }
         });
     });
+
+    $(document).on('change', '#row_length', function(){
+        let per = $(this).val();
+        let url = $.url(window.location.href);
+        let params = url.param();
+        params['page'] = 1;
+        params['per'] = per;
+        location.assign(window.location.origin + window.location.pathname + '?' + $.param(params));
+    });
+
+    $(document).on('click', '.change-page', function(){
+        let page = $(this).data('page')
+        let url = $.url(window.location.href);
+        let params = url.param();
+        params['page'] = page;
+        location.assign(window.location.origin + window.location.pathname + '?' + $.param(params));
+    });
+
 </script>

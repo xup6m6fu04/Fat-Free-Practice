@@ -34,7 +34,6 @@ class TeacherController extends Controller
     public function addTeacher()
     {
         try {
-
             // 新增一個老師
             $args = [];
             $args['id']         = ($this->f3->get('POST.id'))        ?? false;
@@ -52,7 +51,6 @@ class TeacherController extends Controller
             return_json(['type' => 'success']);
 
         } catch (Exception $ex) {
-
             $this->Log($ex, Logger::ERROR);
 
             return_json([
@@ -67,7 +65,6 @@ class TeacherController extends Controller
     {
 
         try {
-
             // 編輯一個老師
             $args = [];
             $args['id']           = ($this->f3->get('POST.id'))           ?? false;
@@ -85,7 +82,6 @@ class TeacherController extends Controller
             ]);
 
         } catch (Exception $ex) {
-
             $this->Log($ex, Logger::ERROR);
 
             return_json([
@@ -100,9 +96,7 @@ class TeacherController extends Controller
     public function getTeacherById()
     {
         try {
-
             $id = ($this->f3->get('POST.id')) ?? false;
-
             $teacher = $this->teacherService->getTeacherById($id, 'load');
 
             if (!$teacher) {
@@ -115,7 +109,6 @@ class TeacherController extends Controller
             ]);
 
         } catch (Exception $ex) {
-
             $this->Log($ex, Logger::ERROR);
 
             return_json([

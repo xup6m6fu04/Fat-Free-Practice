@@ -29,8 +29,17 @@ class ClassService
             throw new Exception('ID is empty');
         }
 
-
         return $this->classRepository->getClasses(['id' => $id], $type);
+    }
+
+    public function getClassBySchoolId($school_id, $type = 'find')
+    {
+        if (!$school_id) {
+            throw new Exception('school_id is empty');
+        }
+
+
+        return $this->classRepository->getClasses(['school_id' => $school_id], $type);
     }
 
     public function addClass($args)

@@ -27,14 +27,23 @@ class StudentController extends Controller
     public function pageStudent()
     {
         // 取得所有學生資料
-        $this->f3->set('students', $this->studentService->getAllStudents());
-        return $this->template('student.html');
+        $data_nums = $this->studentService->countAllStudents();
+        $page = ($this->f3->get('GET.page')) ?? 1;
+        $per = ($this->f3->get('GET.per')) ?? 20;
+
+        $args = paginate($data_nums, $page, $per);
+
+        $students = $this->studentService->getStudentByParams($args);
+
+        $this->f3->set('students', $students);
+        $this->f3->set('page', $args);
+
+        $this->template('student.html');
     }
 
     public function addStudent()
     {
         try {
-
             // 新增一個老師
             $args = [];
             $args['id']           = ($this->f3->get('POST.id'))           ?? false;
@@ -42,7 +51,6 @@ class StudentController extends Controller
             $args['name']         = ($this->f3->get('POST.name'))         ?? false;
             $args['email']        = ($this->f3->get('POST.email'))        ?? false;
             $args['password']     = ($this->f3->get('POST.password'))     ?? false;
-            $args['subscription'] = ($this->f3->get('POST.subscription')) ?? false;
             $args['enable']       = ($this->f3->get('POST.enable'))       ?? false;
             $args['created_at']   = Carbon::now();
             $args['updated_at']   = Carbon::now();
@@ -53,7 +61,6 @@ class StudentController extends Controller
             return_json(['type' => 'success']);
 
         } catch (Exception $ex) {
-
             $this->Log($ex, Logger::ERROR);
 
             return_json([
@@ -68,7 +75,6 @@ class StudentController extends Controller
     {
 
         try {
-
             // 編輯一個學生
             $args = [];
             $args['id']           = ($this->f3->get('POST.id'))           ?? false;
@@ -76,7 +82,6 @@ class StudentController extends Controller
             $args['name']         = ($this->f3->get('POST.name'))         ?? false;
             $args['email']        = ($this->f3->get('POST.email'))        ?? false;
             // $args['password']     = ($this->f3->get('POST.password'))     ?? false;
-            $args['subscription'] = ($this->f3->get('POST.subscription')) ?? false;
             $args['enable']       = ($this->f3->get('POST.enable'))       ?? false;
             $args['updated_at']   = Carbon::now();
 
@@ -87,7 +92,6 @@ class StudentController extends Controller
             ]);
 
         } catch (Exception $ex) {
-
             $this->Log($ex, Logger::ERROR);
 
             return_json([

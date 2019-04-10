@@ -11,11 +11,38 @@
 
     <div class="page-header">
         <div class="page-header-actions">
+
+        </div>
+    </div>
+
+    <div class="panel">
+        <div class="panel-heading">
+            <h3 class="panel-title">學校資料</h3>
+        </div>
+        <div class="panel-body container-fluid">
+            <div class="col-md-12 col-lg-12">
+                <!-- Example Disable -->
+                <div class="example-wrap">
+                    <h4 class="example-title">學校 ID</h4>
+                    <input type="text" id="school_id" class="form-control" value="{{ @school->id }}" disabled="">
+                    <h4 class="example-title">學校名稱</h4>
+                    <input type="text" class="form-control" value="{{ @school->name }}" disabled="">
+                </div>
+
+                <!-- End Example Disable -->
+            </div>
+        </div>
+    </div>
+
+    <div class="page-header">
+        <div class="page-header-actions">
             <button type="button" data-target="#AddModal" data-toggle="modal"
                     class="btn btn-outline btn-primary"><i class="icon wb-plus" aria-hidden="true"></i> Add
             </button>
         </div>
     </div>
+
+
     <!-- Add Modal -->
     <div class="modal fade" id="AddModal" aria-labelledby="AddModalLabel" role="dialog" tabindex="-1"
          style="display: none;" aria-hidden="true">
@@ -25,7 +52,7 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
-                    <h4 class="modal-title" id="AddModalLabel">新增學校</h4>
+                    <h4 class="modal-title" id="AddModalLabel">新增班級</h4>
                 </div>
                 <div class="modal-body">
                     <div class="row">
@@ -47,7 +74,7 @@
                             <input type="radio" name="enable" value="N">  關
                         </div>
                         <div class="col-md-12 float-right">
-                            <button id="add_school" class="btn btn-primary btn-outline" type="button">確定新增</button>
+                            <button id="add_class" class="btn btn-primary btn-outline" type="button">確定新增</button>
                         </div>
                     </div>
                 </div>
@@ -64,7 +91,7 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
-                    <h4 class="modal-title" id="editModalLabel">編輯學校</h4>
+                    <h4 class="modal-title" id="editModalLabel">編輯班級</h4>
                 </div>
                 <div class="modal-body">
                     <div class="row">
@@ -80,7 +107,7 @@
                             <input type="radio" name="edit_enable" value="N">  關
                         </div>
                         <div class="col-md-12 float-right">
-                            <button id="edit_school" class="btn btn-primary btn-outline" type="button">確定修改</button>
+                            <button id="edit_class" class="btn btn-primary btn-outline" type="button">確定修改</button>
                         </div>
                     </div>
                 </div>
@@ -92,7 +119,7 @@
         <div class="panel">
             <header class="panel-heading">
                 <div class="panel-actions"></div>
-                <h3 class="panel-title">Basic</h3>
+                <h3 class="panel-title">{{ @school->name }} 所有班級</h3>
             </header>
             <div class="panel-body">
                 <table class="table table-hover dataTable table-striped w-full" data-plugin="dataTable">
@@ -117,14 +144,14 @@
                     </tr>
                     </tfoot>
                     <tbody>
-                    <repeat group="{{ @schools }}" value="{{ @school }}">
+                    <repeat group="{{ @classes }}" value="{{ @class }}">
                         <tr>
-                            <td><a href="class?school_id={{ @school->id }}">{{ @school->id }}</a></td>
-                            <td>{{ @school->name }}</td>
-                            <td>{{ @school->enable }}</td>
-                            <td>{{ @school->created_at }}</td>
-                            <td>{{ @school->updated_at }}</td>
-                            <td><button data-id="{{ @school->id }}" id="edit_school_modal" data-target="#editModal" data-toggle="modal" type="button" class="btn btn-floating btn-success btn-sm"><i class="icon wb-pencil" aria-hidden="true"></i></button></td>
+                            <td>{{ @class->id }}</td>
+                            <td>{{ @class->name }}</td>
+                            <td>{{ @class->enable }}</td>
+                            <td>{{ @class->created_at }}</td>
+                            <td>{{ @class->updated_at }}</td>
+                            <td><button data-id="{{ @class->id }}" id="edit_class_modal" data-target="#editModal" data-toggle="modal" type="button" class="btn btn-floating btn-success btn-sm"><i class="icon wb-pencil" aria-hidden="true"></i></button></td>
                         </tr>
                     </repeat>
                     </tbody>
@@ -154,12 +181,12 @@
         timer: 3000
     });
 
-    // 編輯按鈕點擊 , Ajax 撈資料渲染到 Html
-    $(document).on('click', '#edit_school_modal', function(){
+    // 編輯學生按鈕點擊 , Ajax 撈資料渲染到 Html
+    $(document).on('click', '#edit_class_modal', function(){
         let id = $(this).data('id');
         $.ajax({
             type: "post",
-            url: "/api/get-school-by-id",
+            url: "/api/get-class-by-id",
             dataType: "json",
             data: {
                 id: id,
@@ -167,13 +194,13 @@
             success: function (result) {
                 if (result.type === 'success') {
 
-                    $('#edit_school').attr('data-id', result.school.id);
-                    $('#edit_name').val(result.school.name);
+                    $('#edit_class').attr('data-id', result.class.id);
+                    $('#edit_name').val(result.class.name);
 
                     $('input[name=edit_enable]').each(function(){
                         let _this = $(this);
                         _this.prop("checked", false);
-                        if (_this.val() === result.school.enable) {
+                        if (_this.val() === result.class.enable) {
                             _this.prop("checked", true);
                         }
                     });
@@ -195,7 +222,7 @@
     });
 
     // 確定編輯學校
-    $(document).on('click', '#edit_school', function () {
+    $(document).on('click', '#edit_class', function () {
 
         let edit_data_arr = {
             'edit_id' : $(this).data('id'),
@@ -222,12 +249,13 @@
 
         $.ajax({
             type: "post",
-            url: "/api/edit-school",
+            url: "/api/edit-class",
             dataType: "json",
             data: {
                 id: edit_data_arr.edit_id,
                 name: edit_data_arr.edit_name,
                 enable: edit_data_arr.edit_enable,
+                school_id: $('#school_id').val()
             },
             success: function (result) {
                 if (result.type === 'success') {
@@ -257,7 +285,7 @@
         });
     });
 
-    $(document).on('click', '#add_school', function () {
+    $(document).on('click', '#add_class', function () {
 
         let data_arr = {
             'id'           : $('#id').val(),
@@ -282,11 +310,12 @@
 
         $.ajax({
             type: "post",
-            url: "/api/add-school",
+            url: "/api/add-class",
             dataType: "json",
             data: {
                 id:           data_arr.id,
                 name:         data_arr.name,
+                school_id:    $('#school_id').val(),
                 enable:       data_arr.enable
             },
             success: function (result) {

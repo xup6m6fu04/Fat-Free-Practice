@@ -15,7 +15,6 @@ class StudentRepository
         $student->name         = $args['name'];
         $student->email        = $args['email'];
         $student->password     = $args['password'];
-        $student->subscription = $args['subscription'];
         $student->enable       = $args['enable'];
         $student->created_at   = $args['created_at'];
         $student->updated_at   = $args['updated_at'];
@@ -32,7 +31,6 @@ class StudentRepository
         $student->name         = $args['name'];
         $student->email        = $args['email'];
         // $student->password     = $args['password'];
-        $student->subscription = $args['subscription'];
         $student->enable       = $args['enable'];
         $student->updated_at   = $args['updated_at'];
         $student->save();
@@ -47,12 +45,17 @@ class StudentRepository
         $name          = $args['name']          ?? false;
         $email         = $args['email']         ?? false;
         // $password      = $args['password']      ?? false;
-        $subscription  = $args['subscription']  ?? false;
         $enable        = $args['enable']        ?? false;
         $created_start = $args['created_start'] ?? false;
         $created_end   = $args['created_at']    ?? false;
         $updated_start = $args['updated_start'] ?? false;
         $updated_end   = $args['updated_at']    ?? false;
+
+        // SQL Params
+        $limit_start  = $args['sql_limit_start']  ?? 0;
+        $limit_end    = $args['sql_limit_end']    ?? 10;
+        $order        = $args['sql_order']        ?? 'created_at';
+        $sort         = $args['sql_sort']         ?? 'desc';
 
         $bind_arr[0] = ' 1=1 ';
 
@@ -60,43 +63,44 @@ class StudentRepository
             $bind_arr[0] .= ' AND id=:id ';
             $bind_arr[':id'] = $id;
         }
-
         if ($school_id) {
             $bind_arr[0] .= ' AND school_id=:school_id ';
             $bind_arr[':school_id'] = $school_id;
         }
         if ($name) {
-            $bind_arr[0] = ' AND name=:name ';
+            $bind_arr[0] .= ' AND name=:name ';
             $bind_arr[':name'] = $name;
         }
         if ($email) {
-            $bind_arr[0] = ' AND email=:email ';
+            $bind_arr[0] .= ' AND email=:email ';
             $bind_arr[':email'] = $email;
         }
-        if ($subscription) {
-            $bind_arr[0] = ' AND subscription=:subscription ';
-            $bind_arr[':subscription'] = $subscription;
-        }
         if ($enable) {
-            $bind_arr[0] = ' AND enable=:enable ';
+            $bind_arr[0] .= ' AND enable=:enable ';
             $bind_arr[':enable'] = $enable;
         }
         if ($created_start) {
-            $bind_arr[0] = ' AND created_at >=:created_start ';
+            $bind_arr[0] .= ' AND created_at >=:created_start ';
             $bind_arr[':created_start'] = $created_start;
         }
         if ($created_end) {
-            $bind_arr[0] = ' AND created_at <:created_end ';
+            $bind_arr[0] .= ' AND created_at <:created_end ';
             $bind_arr[':created_end'] = $created_end;
         }
         if ($updated_start) {
-            $bind_arr[0] = ' AND updated_at >=:updated_start ';
+            $bind_arr[0] .= ' AND updated_at >=:updated_start ';
             $bind_arr[':updated_start'] = $updated_start;
         }
         if ($updated_end) {
-            $bind_arr[0] = ' AND updated_at <:updated_end ';
+            $bind_arr[0] .= ' AND updated_at <:updated_end ';
             $bind_arr[':updated_end'] = $updated_end;
         }
+
+        $bind_arr[0] .= ' ORDER BY :order :sort LIMIT :limit_start, :limit_end ';
+        $bind_arr[':order'] = $order;
+        $bind_arr[':sort'] = $sort;
+        $bind_arr[':limit_start'] = $limit_start;
+        $bind_arr[':limit_end'] = $limit_end;
 
         $student = new Student();
         return $student->$type($bind_arr);

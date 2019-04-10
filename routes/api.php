@@ -11,3 +11,4 @@ $f3->route('POST /api/edit-class', 'App\Controllers\ClassController->editClass')
 $f3->route('POST /api/get-teacher-by-id', 'App\Controllers\TeacherController->getTeacherById');
 $f3->route('POST /api/get-student-by-id', 'App\Controllers\StudentController->getStudentById');
 $f3->route('POST /api/get-school-by-id', 'App\Controllers\SchoolController->getSchoolById');
+$f3->route('POST /api/get-class-by-id', 'App\Controllers\ClassController->getClassById');

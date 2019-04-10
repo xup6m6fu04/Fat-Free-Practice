@@ -35,7 +35,6 @@ class SchoolController extends Controller
     public function addSchool()
     {
         try {
-
             // 新增一個學校
             $args = [];
             $args['id']           = ($this->f3->get('POST.id'))           ?? false;
@@ -50,7 +49,6 @@ class SchoolController extends Controller
             return_json(['type' => 'success']);
 
         } catch (Exception $ex) {
-
             $this->Log($ex, Logger::ERROR);
 
             return_json([
@@ -65,7 +63,6 @@ class SchoolController extends Controller
     {
 
         try {
-
             // 編輯一個學校
             $args = [];
             $args['id']           = ($this->f3->get('POST.id'))           ?? false;
@@ -80,7 +77,6 @@ class SchoolController extends Controller
             ]);
 
         } catch (Exception $ex) {
-
             $this->Log($ex, Logger::ERROR);
 
             return_json([
@@ -95,9 +91,7 @@ class SchoolController extends Controller
     public function getSchoolById()
     {
         try {
-
             $id = ($this->f3->get('POST.id')) ?? false;
-
             $school = $this->schoolService->getSchoolById($id, 'load');
 
             if (!$school) {
@@ -110,7 +104,6 @@ class SchoolController extends Controller
             ]);
 
         } catch (Exception $ex) {
-
             $this->Log($ex, Logger::ERROR);
 
             return_json([
