@@ -27,9 +27,25 @@ class SchoolController extends Controller
 
     public function pageSchool()
     {
-        // 取得所有學校資料
-        $this->f3->set('schools', $this->schoolService->getAllSchools());
-        return $this->template('school.html');
+        $key_word = ($this->f3->get('GET.key_word')) ?? false;
+        if ($key_word) {
+            $key_word = '%' . $key_word . '%';
+            $data_nums = $this->schoolService->countSchoolsByKeyWord($key_word);
+        } else {
+            $data_nums = $this->schoolService->countAllSchools();
+        }
+
+        $page = ($this->f3->get('GET.page')) ?? 1;
+        $per = ($this->f3->get('GET.per')) ?? 20;
+
+        $args = paginate($data_nums, $page, $per);
+
+        $schools = $this->schoolService->getSchoolByParams($args, $key_word);
+
+        $this->f3->set('schools', $schools);
+        $this->f3->set('page', $args);
+
+        $this->template('school.html');
     }
 
     public function addSchool()

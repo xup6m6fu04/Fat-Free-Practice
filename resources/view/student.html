@@ -32,11 +32,6 @@
                             <div class="invalid-feedback"></div>
                         </div>
                         <div class="col-xl-12 form-group">
-                            <label class="form-control-label" for="school_id">School_id</label>
-                            <input type="text" class="form-control" id="school_id" name="school_id" placeholder="school_id" required="">
-                            <div class="invalid-feedback"></div>
-                        </div>
-                        <div class="col-xl-12 form-group">
                             <label class="form-control-label" for="name">Name</label>
                             <input type="text" class="form-control" id="name" name="name" placeholder="name" required="">
                             <div class="invalid-feedback"></div>
@@ -79,11 +74,6 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-xl-12 form-group">
-                            <label class="form-control-label" for="school_id">School_id</label>
-                            <input type="text" class="form-control" id="edit_school_id" name="school_id" placeholder="school_id" required="">
-                            <div class="invalid-feedback"></div>
-                        </div>
                         <div class="col-xl-12 form-group">
                             <label class="form-control-label" for="name">Name</label>
                             <input type="text" class="form-control" id="edit_name" name="name" placeholder="name" required="">
@@ -146,7 +136,8 @@
                         <div class="col-sm-12 col-md-6">
                             <div id="exampleAddRow_filter" class="dataTables_filter">
                                 <label>
-                                    <input type="search" class="form-control form-control-sm" placeholder="Search.." aria-controls="exampleAddRow">
+                                    <input id="search_input"  type="search" class="form-control form-control-sm" placeholder="Search.." aria-controls="exampleAddRow">
+                                    <button id="search_btn" type="button" class="btn btn-icon btn-success btn-outline"><i class="icon wb-search" aria-hidden="true"></i></button>
                                 </label>
                             </div>
                         </div>
@@ -157,7 +148,6 @@
                                 <thead>
                                 <tr role="row">
                                     <th>ID</th>
-                                    <th>School_id</th>
                                     <th>Name</th>
                                     <th>Email</th>
                                     <th>Enable</th>
@@ -170,7 +160,6 @@
                                 <repeat group="{{ @students }}" value="{{ @student }}">
                                     <tr>
                                         <td>{{ @student->id }}</td>
-                                        <td>{{ @student->school_id }}</td>
                                         <td>{{ @student->name }}</td>
                                         <td>{{ @student->email }}</td>
                                         <td>{{ @student->enable }}</td>
@@ -211,7 +200,9 @@
                                             <true><li class="paginate_button page-item active"></true>
                                             <false><li class="paginate_button page-item"></false>
                                         </check>
-                                            <a href="javascript:void(0)" data-page="{{ @i }}"  aria-controls="exampleAddRow" data-dt-idx="1" tabindex="0" class="page-link change-page">{{ @i }}</a>
+                                        <check if="{{ @page['page']-5 < @i && @i < @page['page']+5 }}">
+                                            <true><a href="javascript:void(0)" data-page="{{ @i }}"  aria-controls="exampleAddRow" data-dt-idx="1" tabindex="0" class="page-link change-page">{{ @i }}</a></true>
+                                        </check>
                                         </li>
                                     </loop>
                                     <check if="{{ @page['page'] >= @page['total_pages'] }}">
@@ -263,7 +254,6 @@
             success: function (result) {
                 if (result.type === 'success') {
 
-                    $('#edit_school_id').val(result.student.school_id);
                     $('#edit_name').val(result.student.name);
                     $('#edit_email').val(result.student.email);
                     $('#edit_student').attr('data-id', result.student.id);
@@ -297,7 +287,6 @@
 
         let edit_data_arr = {
             'edit_id' : $(this).data('id'),
-            'edit_school_id' : $('#edit_school_id').val(),
             'edit_name' : $('#edit_name').val(),
             'edit_email' : $('#edit_email').val(),
             'edit_enable' : $('input[name=edit_enable]:checked').val(),
@@ -324,7 +313,6 @@
             dataType: "json",
             data: {
                 id: edit_data_arr.edit_id,
-                school_id: edit_data_arr.edit_school_id,
                 name: edit_data_arr.edit_name,
                 email: edit_data_arr.edit_email,
                 enable: edit_data_arr.edit_enable,
@@ -361,7 +349,6 @@
 
         let data_arr = {
             'id'           : $('#id').val(),
-            'school_id'    : $('#school_id').val(),
             'name'         : $('#name').val(),
             'email'        : $('#email').val(),
             'password'     : $('#password').val(),
@@ -389,7 +376,6 @@
             dataType: "json",
             data: {
                 id:           data_arr.id,
-                school_id:    data_arr.school_id,
                 name:         data_arr.name,
                 email:        data_arr.email,
                 password:     data_arr.password,
@@ -414,6 +400,16 @@
         });
     });
 
+    $(document).on('click', '#search_btn', function(){
+        let search = $('#search_input').val();
+        let url = $.url(window.location.href);
+        let params = url.param();
+        params['page'] = 1;
+        params['per'] = 20;
+        params['key_word'] = search;
+        location.assign(window.location.origin + window.location.pathname + '?' + $.param(params));
+    });
+
     $(document).on('change', '#row_length', function(){
         let per = $(this).val();
         let url = $.url(window.location.href);
@@ -424,7 +420,7 @@
     });
 
     $(document).on('click', '.change-page', function(){
-        let page = $(this).data('page')
+        let page = $(this).data('page');
         let url = $.url(window.location.href);
         let params = url.param();
         params['page'] = page;

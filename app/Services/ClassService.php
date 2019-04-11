@@ -32,6 +32,46 @@ class ClassService
         return $this->classRepository->getClasses(['id' => $id], $type);
     }
 
+    public function countAllClasses()
+    {
+        return $this->classRepository->getClasses([], 'count');
+    }
+
+    public function countClassesByKeyWord($key_word)
+    {
+        $args = [
+            'id'        => $key_word,
+            'name'      => $key_word,
+            'enable'    => $key_word
+        ];
+
+        return $this->classRepository->getClasses($args, 'count', true);
+    }
+
+    public function countClassesBySchoolIdAndKeyWord($school_id, $key_word = false)
+    {
+        $args = [
+            'school_id' => $school_id,
+            'id'        => $key_word,
+            'name'      => $key_word,
+            'enable'    => $key_word
+        ];
+
+        return $this->classRepository->getClassesBySchoolId($args, 'count', $key_word);
+    }
+
+    public function getClassBySchoolIdAndParams($args, $key_word = false)
+    {
+        if ($key_word) {
+            $args['id']        = $key_word;
+            $args['name']      = $key_word;
+            $args['enable']    = $key_word;
+        }
+
+        // TODO : 好像該做點什麼
+        return $this->classRepository->getClassesBySchoolId($args, 'find', $key_word);
+    }
+
     public function getClassBySchoolId($school_id, $type = 'find')
     {
         if (!$school_id) {

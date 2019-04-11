@@ -39,7 +39,7 @@
                             <input type="radio" name="edit_enable" value="N"> 關
                         </div>
                         <div class="col-md-12 float-right">
-                            <button id="edit_class_student" class="btn btn-primary btn-outline" type="button">確定修改</button>
+                            <button id="edit_class_teacher" class="btn btn-primary btn-outline" type="button">確定修改</button>
                         </div>
                     </div>
                 </div>
@@ -173,16 +173,16 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <repeat group="{{ @class_students }}" value="{{ @class_student }}">
+                                <repeat group="{{ @class_teachers }}" value="{{ @class_teacher }}">
                                     <tr>
-                                        <td>{{ @class_student->student_id }}</td>
-                                        <td>{{ @class_student->name }}</td>
-                                        <td>{{ @class_student->email }}</td>
-                                        <td>{{ @class_student->enable }}</td>
-                                        <td>{{ @class_student->created_at }}</td>
-                                        <td>{{ @class_student->updated_at }}</td>
+                                        <td>{{ @class_teacher->teacher_id }}</td>
+                                        <td>{{ @class_teacher->name }}</td>
+                                        <td>{{ @class_teacher->email }}</td>
+                                        <td>{{ @class_teacher->enable }}</td>
+                                        <td>{{ @class_teacher->created_at }}</td>
+                                        <td>{{ @class_teacher->updated_at }}</td>
                                         <td>
-                                            <a href="javascript:void(0)" data-id="{{ @class_student->student_id }}" id="edit_class_student_modal" data-target="#editModal" data-toggle="modal" class="btn btn-sm btn-icon btn-pure btn-default on-default edit-row" data-toggle="tooltip" data-original-title="Edit"><i class="icon wb-edit" aria-hidden="true"></i></a>
+                                            <a href="javascript:void(0)" data-id="{{ @class_teacher->teacher_id }}" id="edit_class_teacher_modal" data-target="#editModal" data-toggle="modal" class="btn btn-sm btn-icon btn-pure btn-default on-default edit-row" data-toggle="tooltip" data-original-title="Edit"><i class="icon wb-edit" aria-hidden="true"></i></a>
                                             <a href="javascript:void(0)" class="btn btn-sm btn-icon btn-pure btn-default on-default remove-row" data-toggle="tooltip" data-original-title="Remove"><i class="icon wb-trash" aria-hidden="true"></i></a>
                                         </td>
                                     </tr>
@@ -258,11 +258,11 @@
     });
 
     // 編輯學生按鈕點擊 , Ajax 撈資料渲染到 Html
-    $(document).on('click', '#edit_class_student_modal', function(){
+    $(document).on('click', '#edit_class_teacher_modal', function(){
         let id = $(this).data('id');
         $.ajax({
             type: "post",
-            url: "/api/get-student-by-id",
+            url: "/api/get-teacher-by-id",
             dataType: "json",
             data: {
                 id: id,
@@ -270,14 +270,14 @@
             success: function (result) {
                 if (result.type === 'success') {
 
-                    $('#edit_name').val(result.student.name);
-                    $('#edit_email').val(result.student.email);
-                    $('#edit_class_student').attr('data-id', result.student.id);
+                    $('#edit_name').val(result.teacher.name);
+                    $('#edit_email').val(result.teacher.email);
+                    $('#edit_class_teacher').attr('data-id', result.teacher.id);
 
                     $('input[name=edit_enable]').each(function(){
                         let _this = $(this);
                         _this.prop("checked", false);
-                        if (_this.val() === result.student.enable) {
+                        if (_this.val() === result.teacher.enable) {
                             _this.prop("checked", true);
                         }
                     });
@@ -299,7 +299,7 @@
     });
 
     // 確定編輯學生
-    $(document).on('click', '#edit_class_student', function () {
+    $(document).on('click', '#edit_class_teacher', function () {
 
         let edit_data_arr = {
             'edit_id' : $(this).data('id'),
@@ -325,7 +325,7 @@
 
         $.ajax({
             type: "post",
-            url: "/api/edit-student",
+            url: "/api/edit-teacher",
             dataType: "json",
             data: {
                 id: edit_data_arr.edit_id,

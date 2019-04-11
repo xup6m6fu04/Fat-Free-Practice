@@ -26,9 +26,25 @@ class TeacherController extends Controller
 
     public function pageTeacher()
     {
-        // 取得所有老師資料
-        $this->f3->set('teachers', $this->teacherService->getAllTeachers());
-        return $this->template('teacher.html');
+        $key_word = ($this->f3->get('GET.key_word')) ?? false;
+        if ($key_word) {
+            $key_word = '%' . $key_word . '%';
+            $data_nums = $this->teacherService->countTeachersByKeyWord($key_word);
+        } else {
+            $data_nums = $this->teacherService->countAllTeachers();
+        }
+
+        $page = ($this->f3->get('GET.page')) ?? 1;
+        $per = ($this->f3->get('GET.per')) ?? 20;
+
+        $args = paginate($data_nums, $page, $per);
+
+        $teachers = $this->teacherService->getTeacherByParams($args, $key_word);
+
+        $this->f3->set('teachers', $teachers);
+        $this->f3->set('page', $args);
+
+        $this->template('teacher.html');
     }
 
     public function addTeacher()
@@ -37,7 +53,6 @@ class TeacherController extends Controller
             // 新增一個老師
             $args = [];
             $args['id']         = ($this->f3->get('POST.id'))        ?? false;
-            $args['school_id']  = ($this->f3->get('POST.school_id')) ?? false;
             $args['name']       = ($this->f3->get('POST.name'))      ?? false;
             $args['email']      = ($this->f3->get('POST.email'))     ?? false;
             $args['password']   = ($this->f3->get('POST.password'))  ?? false;
@@ -68,7 +83,6 @@ class TeacherController extends Controller
             // 編輯一個老師
             $args = [];
             $args['id']           = ($this->f3->get('POST.id'))           ?? false;
-            $args['school_id']    = ($this->f3->get('POST.school_id'))    ?? false;
             $args['name']         = ($this->f3->get('POST.name'))         ?? false;
             $args['email']        = ($this->f3->get('POST.email'))        ?? false;
             // $args['password']     = ($this->f3->get('POST.password'))     ?? false;

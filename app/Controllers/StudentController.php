@@ -26,14 +26,21 @@ class StudentController extends Controller
 
     public function pageStudent()
     {
-        // 取得所有學生資料
-        $data_nums = $this->studentService->countAllStudents();
+        $key_word = ($this->f3->get('GET.key_word')) ?? false;
+
+        if ($key_word) {
+            $key_word = '%' . $key_word . '%';
+            $data_nums = $this->studentService->countStudentsByKeyWord($key_word);
+        } else {
+            $data_nums = $this->studentService->countAllStudents();
+        }
+
         $page = ($this->f3->get('GET.page')) ?? 1;
         $per = ($this->f3->get('GET.per')) ?? 20;
 
         $args = paginate($data_nums, $page, $per);
 
-        $students = $this->studentService->getStudentByParams($args);
+        $students = $this->studentService->getStudentByParams($args, $key_word);
 
         $this->f3->set('students', $students);
         $this->f3->set('page', $args);
@@ -44,10 +51,9 @@ class StudentController extends Controller
     public function addStudent()
     {
         try {
-            // 新增一個老師
+            // 新增一個學生
             $args = [];
             $args['id']           = ($this->f3->get('POST.id'))           ?? false;
-            $args['school_id']    = ($this->f3->get('POST.school_id'))    ?? false;
             $args['name']         = ($this->f3->get('POST.name'))         ?? false;
             $args['email']        = ($this->f3->get('POST.email'))        ?? false;
             $args['password']     = ($this->f3->get('POST.password'))     ?? false;
@@ -78,7 +84,6 @@ class StudentController extends Controller
             // 編輯一個學生
             $args = [];
             $args['id']           = ($this->f3->get('POST.id'))           ?? false;
-            $args['school_id']    = ($this->f3->get('POST.school_id'))    ?? false;
             $args['name']         = ($this->f3->get('POST.name'))         ?? false;
             $args['email']        = ($this->f3->get('POST.email'))        ?? false;
             // $args['password']     = ($this->f3->get('POST.password'))     ?? false;

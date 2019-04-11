@@ -20,6 +20,36 @@ class TeacherService
         return $this->teacherRepository->getTeachers();
     }
 
+    public function countAllTeachers()
+    {
+        return $this->teacherRepository->getTeachers([], 'count');
+    }
+
+    public function countTeachersByKeyWord($key_word)
+    {
+        $args = [
+            'id'        => $key_word,
+            'name'      => $key_word,
+            'email'     => $key_word,
+            'enable'    => $key_word
+        ];
+
+        return $this->teacherRepository->getTeachers($args, 'count', true);
+    }
+
+    public function getTeacherByParams($args, $key_word = false)
+    {
+        if ($key_word) {
+            $args['id']        = $key_word;
+            $args['name']      = $key_word;
+            $args['email']     = $key_word;
+            $args['enable']    = $key_word;
+        }
+
+        // TODO : 好像該做點什麼
+        return $this->teacherRepository->getTeachers($args, 'find', $key_word);
+    }
+
     public function getTeacherById($id, $type = 'load')
     {
         if (!$id) {

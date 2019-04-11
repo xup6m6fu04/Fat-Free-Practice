@@ -11,7 +11,6 @@ class StudentRepository
     {
         $student = new Student();
         $student->id           = $args['id'];
-        $student->school_id    = $args['school_id'];
         $student->name         = $args['name'];
         $student->email        = $args['email'];
         $student->password     = $args['password'];
@@ -27,7 +26,6 @@ class StudentRepository
     {
         $student = $this->getStudents(['id' => $id], 'load');
 
-        $student->school_id    = $args['school_id'];
         $student->name         = $args['name'];
         $student->email        = $args['email'];
         // $student->password     = $args['password'];
@@ -38,10 +36,13 @@ class StudentRepository
         return $student;
     }
 
-    public function getStudents($args = [], $type = 'find')
+    public function getStudents($args = [], $type = 'find', $key_word = false)
     {
+        $connect = ($key_word) ? 'OR ' : 'AND ';
+        $symbol = ($key_word) ? 'like ' : '= ';
+        $bind_arr[0] = ($key_word) ? '' : '    1=1  ';
+
         $id            = $args['id']            ?? false;
-        $school_id     = $args['school_id']     ?? false;
         $name          = $args['name']          ?? false;
         $email         = $args['email']         ?? false;
         // $password      = $args['password']      ?? false;
@@ -57,26 +58,20 @@ class StudentRepository
         $order        = $args['sql_order']        ?? 'created_at';
         $sort         = $args['sql_sort']         ?? 'desc';
 
-        $bind_arr[0] = ' 1=1 ';
-
         if ($id) {
-            $bind_arr[0] .= ' AND id=:id ';
+            $bind_arr[0] .= $connect . ' id '. $symbol .' :id ';
             $bind_arr[':id'] = $id;
         }
-        if ($school_id) {
-            $bind_arr[0] .= ' AND school_id=:school_id ';
-            $bind_arr[':school_id'] = $school_id;
-        }
         if ($name) {
-            $bind_arr[0] .= ' AND name=:name ';
+            $bind_arr[0] .= $connect . ' name ' . $symbol . ' :name ';
             $bind_arr[':name'] = $name;
         }
         if ($email) {
-            $bind_arr[0] .= ' AND email=:email ';
+            $bind_arr[0] .= $connect . ' email ' . $symbol . ' :email ';
             $bind_arr[':email'] = $email;
         }
         if ($enable) {
-            $bind_arr[0] .= ' AND enable=:enable ';
+            $bind_arr[0] .= $connect . ' enable ' . $symbol . ' :enable ';
             $bind_arr[':enable'] = $enable;
         }
         if ($created_start) {
@@ -96,11 +91,11 @@ class StudentRepository
             $bind_arr[':updated_end'] = $updated_end;
         }
 
-        $bind_arr[0] .= ' ORDER BY :order :sort LIMIT :limit_start, :limit_end ';
-        $bind_arr[':order'] = $order;
-        $bind_arr[':sort'] = $sort;
+        $bind_arr[0] .= ' ORDER BY ' . $order . ' ' . $sort . ' LIMIT :limit_start, :limit_end ';
         $bind_arr[':limit_start'] = $limit_start;
         $bind_arr[':limit_end'] = $limit_end;
+
+        $bind_arr[0] = substr($bind_arr[0], 3);
 
         $student = new Student();
         return $student->$type($bind_arr);

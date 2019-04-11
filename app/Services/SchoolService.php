@@ -20,6 +20,34 @@ class SchoolService
         return $this->schoolRepository->getSchools();
     }
 
+    public function countAllSchools()
+    {
+        return $this->schoolRepository->getSchools([], 'count');
+    }
+
+    public function countSchoolsByKeyWord($key_word)
+    {
+        $args = [
+            'id'        => $key_word,
+            'name'      => $key_word,
+            'enable'    => $key_word
+        ];
+
+        return $this->schoolRepository->getSchools($args, 'count', true);
+    }
+
+    public function getSchoolByParams($args, $key_word = false)
+    {
+        if ($key_word) {
+            $args['id']        = $key_word;
+            $args['name']      = $key_word;
+            $args['enable']    = $key_word;
+        }
+
+        // TODO : 好像該做點什麼
+        return $this->schoolRepository->getSchools($args, 'find', $key_word);
+    }
+
     public function getSchoolById($id, $type = 'load')
     {
         if (!$id) {

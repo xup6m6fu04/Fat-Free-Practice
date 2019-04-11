@@ -3,43 +3,30 @@
 
 namespace App\Repositories;
 
-use App\School;
+use App\VClassTeacher;
 
-class SchoolRepository
+class VClassTeacherRepository
 {
-    public function addSchool($args)
-    {
-        $school = new School();
-        $school->id           = $args['id'];
-        $school->name         = $args['name'];
-        $school->enable       = $args['enable'];
-        $school->created_at   = $args['created_at'];
-        $school->updated_at   = $args['updated_at'];
-        $school->save();
 
-        return $school;
-    }
+    //***** WARNING *****//
+    //                   //
+    //   此表為檢視表，    //
+    //   僅可作為查詢使用  //
+    //                   //
+    //***** WARNING *****//
 
-    public function editSchool($id, $args)
-    {
-        $school = $this->getSchools(['id' => $id], 'load');
-
-        $school->name         = $args['name'];
-        $school->enable       = $args['enable'];
-        $school->updated_at   = $args['updated_at'];
-        $school->save();
-
-        return $school;
-    }
-
-    public function getSchools($args = [], $type = 'find', $key_word = false)
+    public function getVClassTeachers($args = [], $type = 'find', $key_word = false)
     {
         $connect = ($key_word) ? 'OR ' : 'AND ';
         $symbol = ($key_word) ? 'like ' : '= ';
         $bind_arr[0] = ($key_word) ? '' : '    1=1  ';
 
-        $id            = $args['id']            ?? false;
+        $school_id     = $args['school_id']     ?? false;
+        $class_id      = $args['class_id']      ?? false;
+        $teacher_id    = $args['teacher_id']    ?? false;
         $name          = $args['name']          ?? false;
+        $email         = $args['email']         ?? false;
+        // $password      = $args['password']      ?? false;
         $enable        = $args['enable']        ?? false;
         $created_start = $args['created_start'] ?? false;
         $created_end   = $args['created_at']    ?? false;
@@ -52,13 +39,25 @@ class SchoolRepository
         $order        = $args['sql_order']        ?? 'created_at';
         $sort         = $args['sql_sort']         ?? 'desc';
 
-        if ($id) {
-            $bind_arr[0] .= $connect . ' id '. $symbol .' :id ';
-            $bind_arr[':id'] = $id;
+        if ($school_id) {
+            $bind_arr[0] .= $connect . ' school_id '. $symbol .' :school_id ';
+            $bind_arr[':school_id'] = $school_id;
+        }
+        if ($class_id) {
+            $bind_arr[0] .= $connect . ' class_id '. $symbol .' :class_id ';
+            $bind_arr[':class_id'] = $class_id;
+        }
+        if ($teacher_id) {
+            $bind_arr[0] .= $connect . ' teacher_id ' . $symbol . ' :teacher_id ';
+            $bind_arr[':teacher_id'] = $teacher_id;
         }
         if ($name) {
             $bind_arr[0] .= $connect . ' name ' . $symbol . ' :name ';
             $bind_arr[':name'] = $name;
+        }
+        if ($email) {
+            $bind_arr[0] .= $connect . ' email ' . $symbol . ' :email ';
+            $bind_arr[':email'] = $email;
         }
         if ($enable) {
             $bind_arr[0] .= $connect . ' enable ' . $symbol . ' :enable ';
@@ -87,8 +86,8 @@ class SchoolRepository
 
         $bind_arr[0] = substr($bind_arr[0], 3);
 
-        $school = new School();
-        return $school->$type($bind_arr);
+        $v_class_teacher = new VClassTeacher();
+        return $v_class_teacher->$type($bind_arr);
 
     }
 }

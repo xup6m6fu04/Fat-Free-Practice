@@ -25,10 +25,29 @@ class StudentService
         return $this->studentRepository->getStudents([], 'count');
     }
 
-    public function getStudentByParams($args)
+    public function countStudentsByKeyWord($key_word)
     {
+        $args = [
+            'id'        => $key_word,
+            'name'      => $key_word,
+            'email'     => $key_word,
+            'enable'    => $key_word
+        ];
+
+        return $this->studentRepository->getStudents($args, 'count', true);
+    }
+
+    public function getStudentByParams($args, $key_word = false)
+    {
+        if ($key_word) {
+            $args['id']        = $key_word;
+            $args['name']      = $key_word;
+            $args['email']     = $key_word;
+            $args['enable']    = $key_word;
+        }
+
         // TODO : 好像該做點什麼
-        return $this->studentRepository->getStudents($args);
+        return $this->studentRepository->getStudents($args, 'find', $key_word);
     }
 
     public function getStudentById($id, $type = 'load')
