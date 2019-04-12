@@ -28,10 +28,10 @@ class StudentService
     public function countStudentsByKeyWord($key_word)
     {
         $args = [
-            'id'        => $key_word,
-            'name'      => $key_word,
-            'email'     => $key_word,
-            'enable'    => $key_word
+            'student_id' => $key_word,
+            'name'       => $key_word,
+            'email'      => $key_word,
+            'enable'     => $key_word
         ];
 
         return $this->studentRepository->getStudents($args, 'count', true);
@@ -40,23 +40,23 @@ class StudentService
     public function getStudentByParams($args, $key_word = false)
     {
         if ($key_word) {
-            $args['id']        = $key_word;
-            $args['name']      = $key_word;
-            $args['email']     = $key_word;
-            $args['enable']    = $key_word;
+            $args['student_id'] = $key_word;
+            $args['name']       = $key_word;
+            $args['email']      = $key_word;
+            $args['enable']     = $key_word;
         }
 
         // TODO : 好像該做點什麼
         return $this->studentRepository->getStudents($args, 'find', $key_word);
     }
 
-    public function getStudentById($id, $type = 'load')
+    public function getStudentByStudentId($student_id, $type = 'load')
     {
-        if (!$id) {
-            throw new Exception('ID is empty');
+        if (!$student_id) {
+            throw new Exception('Student ID is empty');
         }
 
-        return $this->studentRepository->getStudents(['id' => $id], $type);
+        return $this->studentRepository->getStudents(['student_id' => $student_id], $type);
     }
 
     public function addStudent($args)
@@ -74,13 +74,13 @@ class StudentService
         return $this->studentRepository->addStudent($args);
     }
 
-    public function editStudent($id, $args)
+    public function editStudent($student_id, $args)
     {
-        if (!$args['id']) {
-            throw new Exception('ID is Empty');
+        if (!$args['student_id']) {
+            throw new Exception('Student ID is Empty');
         }
 
-        $student = $this->getStudentById($args['id']);
+        $student = $this->getStudentByStudentId($args['student_id']);
 
         if (!$student) {
             throw new Exception('Student does not exist');
@@ -94,6 +94,6 @@ class StudentService
             // TODO 檢查格式
         }
 
-        return $this->studentRepository->editStudent($id, $args);
+        return $this->studentRepository->editStudent($student_id, $args);
     }
 }

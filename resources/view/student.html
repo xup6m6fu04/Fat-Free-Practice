@@ -14,21 +14,73 @@
         <div class="page-header-actions">
         </div>
     </div>
+    <!-- Assign Modal -->
+    <div class="modal fade modal-success" id="exampleModalSuccess" aria-labelledby="exampleModalSuccess" role="dialog" tabindex="-1" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title">Assign Student</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row" style="padding-top: 20px;">
+                        <div class="col-xl-3 ">
+                            <h4 class="example-title">Student ID : </h4>
+                        </div>
+                        <div class="col-xl-9">
+                            <input type="text" class="form-control" id="assign_student_id" disabled>
+                        </div>
+                    </div>
+                    <div class="row" style="padding-top: 20px;">
+                        <div class="col-xl-3 ">
+                            <h4 class="example-title">School : </h4>
+                        </div>
+                        <div class="col-xl-9">
+                            <select id="assign_school" class="form-control">
+                                <option disabled selected>Please Select</option>
+                                <repeat group="{{ @schools }}" value="{{ @school }}">
+                                    <option value="{{ @school->school_id }}">{{ @school->name }}</option>
+                                </repeat>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row" style="padding-top: 20px;">
+                        <div class="col-xl-3 ">
+                            <h4 class="example-title">Class : </h4>
+                        </div>
+                        <div class="col-xl-9">
+                            <select id="assign_class" class="form-control">
+                                <option>Option 1</option>
+                                <option>Option 2</option>
+                                <option>Option 3</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button id="confirm_assign" type="button" class="btn btn-success">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- Add Modal -->
-    <div class="modal fade" id="AddModal" aria-labelledby="AddModalLabel" role="dialog" tabindex="-1" style="display: none;" aria-hidden="true">
+    <div class="modal fade modal-primary" id="AddModal" aria-labelledby="AddModalLabel" role="dialog" tabindex="-1" style="display: none;" aria-hidden="true">
         <div class="modal-dialog modal-simple">
             <form class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
-                    <h4 class="modal-title" id="AddModalLabel">新增學生</h4>
+                    <h4 class="modal-title" id="AddModalLabel">Add Student</h4>
                 </div>
                 <div class="modal-body">
-                    <div class="row">
+                    <div class="row" style="padding-top: 20px">
                         <div class="col-xl-12 form-group">
-                            <label class="form-control-label" for="id">ID</label>
-                            <input type="text" class="form-control" id="id" name="id" placeholder="id" required="">
+                            <label class="form-control-label" for="student_id">Student ID</label>
+                            <input type="text" class="form-control" id="student_id" name="student_id" placeholder="student_id" required="">
                             <div class="invalid-feedback"></div>
                         </div>
                         <div class="col-xl-12 form-group">
@@ -53,27 +105,28 @@
                             <br>
                             <input type="radio" name="enable" value="N"> 關
                         </div>
-                        <div class="col-md-12 float-right">
-                            <button id="add_student" class="btn btn-primary btn-outline" type="button">確定新增</button>
-                        </div>
                     </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button id="add_student" type="button" class="btn btn-primary">Save changes</button>
                 </div>
             </form>
         </div>
     </div>
 
     <!--  Edit Modal  -->
-    <div class="modal fade" id="editModal" aria-labelledby="editModalLabel" role="dialog" tabindex="-1" style="display: none;" aria-hidden="true">
+    <div class="modal fade modal-primary" id="editModal" aria-labelledby="editModalLabel" role="dialog" tabindex="-1" style="display: none;" aria-hidden="true">
         <div class="modal-dialog modal-simple">
             <form class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
-                    <h4 class="modal-title" id="editModalLabel">編輯學生</h4>
+                    <h4 class="modal-title" id="editModalLabel">Edit Student</h4>
                 </div>
                 <div class="modal-body">
-                    <div class="row">
+                    <div class="row" style="padding-top: 20px">
                         <div class="col-xl-12 form-group">
                             <label class="form-control-label" for="name">Name</label>
                             <input type="text" class="form-control" id="edit_name" name="name" placeholder="name" required="">
@@ -91,10 +144,11 @@
                             <br>
                             <input type="radio" name="edit_enable" value="N"> 關
                         </div>
-                        <div class="col-md-12 float-right">
-                            <button id="edit_student" class="btn btn-primary btn-outline" type="button">確定修改</button>
-                        </div>
                     </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button id="edit_student" type="button" class="btn btn-primary">Save changes</button>
                 </div>
             </form>
         </div>
@@ -153,20 +207,24 @@
                                     <th>Enable</th>
                                     <th>Created_at</th>
                                     <th>Updated_at</th>
+                                    <th>Assign</th>
                                     <th>Edit</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <repeat group="{{ @students }}" value="{{ @student }}">
                                     <tr>
-                                        <td>{{ @student->id }}</td>
+                                        <td>{{ @student->student_id }}</td>
                                         <td>{{ @student->name }}</td>
                                         <td>{{ @student->email }}</td>
                                         <td>{{ @student->enable }}</td>
                                         <td>{{ @student->created_at }}</td>
                                         <td>{{ @student->updated_at }}</td>
                                         <td>
-                                            <a href="javascript:void(0)" data-id="{{ @student->id }}" id="edit_student_modal" data-target="#editModal" data-toggle="modal" class="btn btn-sm btn-icon btn-pure btn-default on-default edit-row" data-toggle="tooltip" data-original-title="Edit"><i class="icon wb-edit" aria-hidden="true"></i></a>
+                                            <a href="javascript:void(0)" data-id="{{ @student->student_id }}" id ="assign_modal" data-target="#exampleModalSuccess" data-toggle="modal"><span class="badge badge-pill badge-dark">Assign</span></a>
+                                        </td>
+                                        <td>
+                                            <a href="javascript:void(0)" data-id="{{ @student->student_id }}" id="edit_student_modal" data-target="#editModal" data-toggle="modal" class="btn btn-sm btn-icon btn-pure btn-default on-default edit-row" data-toggle="tooltip" data-original-title="Edit"><i class="icon wb-edit" aria-hidden="true"></i></a>
                                             <a href="javascript:void(0)" class="btn btn-sm btn-icon btn-pure btn-default on-default remove-row" data-toggle="tooltip" data-original-title="Remove"><i class="icon wb-trash" aria-hidden="true"></i></a>
                                         </td>
                                     </tr>
@@ -241,22 +299,21 @@
         timer: 3000
     });
 
-    // 編輯學生按鈕點擊 , Ajax 撈資料渲染到 Html
     $(document).on('click', '#edit_student_modal', function(){
-        let id = $(this).data('id');
+        let student_id = $(this).data('id');
         $.ajax({
             type: "post",
-            url: "/api/get-student-by-id",
+            url: "/api/get-student-by-student-id",
             dataType: "json",
             data: {
-                id: id,
+                student_id: student_id,
             },
             success: function (result) {
                 if (result.type === 'success') {
 
                     $('#edit_name').val(result.student.name);
                     $('#edit_email').val(result.student.email);
-                    $('#edit_student').attr('data-id', result.student.id);
+                    $('#edit_student').attr('data-id', result.student.student_id);
 
                     $('input[name=edit_enable]').each(function(){
                         let _this = $(this);
@@ -282,7 +339,6 @@
         });
     });
 
-    // 確定編輯學生
     $(document).on('click', '#edit_student', function () {
 
         let edit_data_arr = {
@@ -312,7 +368,7 @@
             url: "/api/edit-student",
             dataType: "json",
             data: {
-                id: edit_data_arr.edit_id,
+                student_id: edit_data_arr.edit_id,
                 name: edit_data_arr.edit_name,
                 email: edit_data_arr.edit_email,
                 enable: edit_data_arr.edit_enable,
@@ -348,7 +404,7 @@
     $(document).on('click', '#add_student', function () {
 
         let data_arr = {
-            'id'           : $('#id').val(),
+            'student_id'   : $('#student_id').val(),
             'name'         : $('#name').val(),
             'email'        : $('#email').val(),
             'password'     : $('#password').val(),
@@ -375,7 +431,7 @@
             url: "/api/add-student",
             dataType: "json",
             data: {
-                id:           data_arr.id,
+                student_id:   data_arr.student_id,
                 name:         data_arr.name,
                 email:        data_arr.email,
                 password:     data_arr.password,
@@ -400,6 +456,15 @@
         });
     });
 
+    $(document).on('change', '#assign', function(){
+        let per = $(this).val();
+        let url = $.url(window.location.href);
+        let params = url.param();
+        params['page'] = 1;
+        params['per'] = per;
+        location.assign(window.location.origin + window.location.pathname + '?' + $.param(params));
+    });
+
     $(document).on('click', '#search_btn', function(){
         let search = $('#search_input').val();
         let url = $.url(window.location.href);
@@ -408,6 +473,39 @@
         params['per'] = 20;
         params['key_word'] = search;
         location.assign(window.location.origin + window.location.pathname + '?' + $.param(params));
+    });
+
+    $(document).on('change', '#assign_school', function(){
+        let school_id = $(this).val();
+        $.ajax({
+            type: "post",
+            url: "/api/get-class-by-school-id",
+            dataType: "json",
+            data: {
+                school_id: school_id,
+            },
+            success: function (result) {
+                if (result.type === 'success') {
+
+                    $('#assign_class').children().remove();
+                    for (let key in result.class) {
+                        $('#assign_class').append("<option value='" + result.class[key].id + "'>"+ result.class[key].name +"</option>");
+                    }
+
+                } else if (result.type === 'error') {
+                    toast({
+                        type: 'error',
+                        title: result.message
+                    })
+                }
+            },
+            error: function () {
+                toast({
+                    type: 'error',
+                    title: '系統異常'
+                })
+            }
+        });
     });
 
     $(document).on('change', '#row_length', function(){
@@ -419,12 +517,21 @@
         location.assign(window.location.origin + window.location.pathname + '?' + $.param(params));
     });
 
+    $(document).on('click', '#confirm_assign', function(){
+        console.log($('#assign_school').val() + ',' + $('#assign_school').find("option:selected").text());
+        console.log($('#assign_class').val() + ',' + $('#assign_class').find("option:selected").text());
+    });
+
     $(document).on('click', '.change-page', function(){
         let page = $(this).data('page');
         let url = $.url(window.location.href);
         let params = url.param();
         params['page'] = page;
         location.assign(window.location.origin + window.location.pathname + '?' + $.param(params));
+    });
+
+    $(document).on('click', '#assign_modal', function(){
+        $('#assign_student_id').val($(this).data('id'));
     });
 
 </script>

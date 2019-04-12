@@ -4,18 +4,19 @@
 namespace App\Repositories;
 
 use App\Classes;
+use Carbon\Carbon;
 
 class ClassRepository
 {
     public function addClass($args)
     {
         $class = new Classes();
-        $class->id           = $args['id'];
+        $class->class_id     = $args['class_id'];
         $class->school_id    = $args['school_id'];
         $class->name         = $args['name'];
         $class->enable       = $args['enable'];
-        $class->created_at   = $args['created_at'];
-        $class->updated_at   = $args['updated_at'];
+        $class->created_at   = Carbon::parse($args['created_at'])->timestamp;
+        $class->updated_at   = Carbon::parse($args['updated_at'])->timestamp;
         $class->save();
 
         return $class;
@@ -27,7 +28,7 @@ class ClassRepository
 
         $class->name         = $args['name'];
         $class->enable       = $args['enable'];
-        $class->updated_at   = $args['updated_at'];
+        $class->updated_at   = Carbon::parse($args['updated_at'])->timestamp;
         $class->save();
 
         return $class;
@@ -39,7 +40,7 @@ class ClassRepository
         $symbol = ($key_word) ? 'like ' : '= ';
         $verify = true;
 
-        $id            = $args['id']            ?? false;
+        $class_id      = $args['class_id']      ?? false;
         $school_id     = $args['school_id']     ?? false;
         $name          = $args['name']          ?? false;
         // $password      = $args['password']      ?? false;
@@ -53,12 +54,12 @@ class ClassRepository
 
         $bind_arr[0] = '  school_id=:school_id AND ( ';
 
-        if ($id) {
+        if ($class_id) {
             $bind_arr[0] .= ($verify)
-                ? ' id '. $symbol .' :id '
-                : $connect . ' id '. $symbol .' :id ';
+                ? ' class_id '. $symbol .' :class_id '
+                : $connect . ' class_id '. $symbol .' :class_id ';
             $verify = false;
-            $bind_arr[':id'] = $id;
+            $bind_arr[':class_id'] = $class_id;
         }
         if ($name) {
             $bind_arr[0] .= ($verify)

@@ -2,6 +2,10 @@
 
 require __DIR__ . '/../vendor/autoload.php';
 
+use Carbon\Carbon;
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+
 $f3 = \Base::instance();
 
 // 設定 view 路徑
@@ -19,7 +23,6 @@ $config = $f3->get('config');
 date_default_timezone_set($config->get('app.timezone'));
 
 // 連線資料庫
-
 if ($config->get('database.default') === 'mysql') {
     $f3->set('db', new DB\SQL
         (
@@ -34,6 +37,26 @@ if ($config->get('database.default') === 'mysql') {
         )
     );
 }
+
+// 500 ERROR 錯誤捕捉
+$f3->set('ONERROR',
+    function($f3) {
+        $log = new Logger('log');
+        $log_name = 'log-' . Carbon::now()->toDateString() . '.log';
+        if (!file_exists(__DIR__ . '/../storage/log/' . $log_name)) {
+            file_put_contents(__DIR__ . '/../storage/log/' . $log_name, '');
+        }
+        $log->pushHandler(new StreamHandler(__DIR__ . '/../storage/log/' . $log_name, Logger::ERROR));
+        $log->error('==========================ERROR LOG START==========================');
+        $log->error('ERROR.code : '   . $f3->get('ERROR.code'));
+        $log->error('ERROR.status : ' . $f3->get('ERROR.status'));
+        $log->error('ERROR.text : '   . $f3->get('ERROR.text'));
+        $log->error('ERROR.trace : '  . $f3->get('ERROR.trace'));
+        $log->error('ERROR.level : '  . $f3->get('ERROR.level'));
+        $log->error('ERROR.code : '   . $f3->get('ERROR.code'));
+        $log->error('==========================ERROR LOG END=============================');
+    }
+);
 
 // 網頁 專用路由 (CMS)
 require __DIR__ . '/../routes/web.php';

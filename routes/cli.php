@@ -14,6 +14,8 @@
     $f3->route('GET /seed/assign-student', 'App\Commands\SeedCommand->assignStudent');
     $f3->route('GET /seed/assign-teacher', 'App\Commands\SeedCommand->assignTeacher');
     $f3->route('GET /seed/assign-all', 'App\Commands\SeedCommand->assignAll');
+
+    $f3->route('GET /seed/run', 'App\Commands\SeedCommand->run');
 });
 
 \Middleware::instance()->run();

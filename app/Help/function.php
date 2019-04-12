@@ -21,6 +21,21 @@ if (!function_exists('to_Array')) {
     }
 }
 
+if (!function_exists('to_Array_two')) {
+    function to_Array_two($objs)
+    {
+        $result = [];
+
+        foreach ($objs as $key => $obj) {
+            foreach($obj as $key2 => $l_obj) {
+                $result[$key][$key2] = $l_obj;
+            }
+        }
+
+        return $result;
+    }
+}
+
 if (!function_exists('paginate')) {
     function paginate($data_nums, $page = 1, $per = 20)
     {

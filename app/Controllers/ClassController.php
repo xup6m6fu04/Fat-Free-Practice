@@ -218,6 +218,32 @@ class  ClassController extends Controller
 
     }
 
+    public function getClassBySchoolId()
+    {
+        try {
+            $school_id = ($this->f3->get('POST.school_id')) ?? false;
+            $class = $this->classService->getClassBySchoolId($school_id);
+
+            if (!$class) {
+                throw new Exception('Class Not Found');
+            }
+
+            return_json([
+                'type' => 'success',
+                'class' => to_Array_two($class)
+            ]);
+
+        } catch (Exception $ex) {
+            $this->Log($ex, Logger::ERROR);
+
+            return_json([
+                'type' => 'error',
+                'message' => $ex->getMessage()
+            ]);
+
+        }
+    }
+
     public function getClassById()
     {
         try {

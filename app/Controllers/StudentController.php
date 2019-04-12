@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Services\SchoolService;
 use App\Services\StudentService;
 use App\Traits\LoggerTrait;
 use Carbon\Carbon;
@@ -13,6 +14,7 @@ class StudentController extends Controller
     protected $f3;
     protected $db;
     protected $studentService;
+    protected $schoolService;
 
     use LoggerTrait;
 
@@ -22,6 +24,7 @@ class StudentController extends Controller
         $this->f3 = $f3;
         $this->db = $f3->get('db');
         $this->studentService = new StudentService();
+        $this->schoolService = new SchoolService();
     }
 
     public function pageStudent()
@@ -41,8 +44,10 @@ class StudentController extends Controller
         $args = paginate($data_nums, $page, $per);
 
         $students = $this->studentService->getStudentByParams($args, $key_word);
+        $schools = $this->schoolService->getAllSchools();
 
         $this->f3->set('students', $students);
+        $this->f3->set('schools', $schools);
         $this->f3->set('page', $args);
 
         $this->template('student.html');
@@ -53,7 +58,7 @@ class StudentController extends Controller
         try {
             // 新增一個學生
             $args = [];
-            $args['id']           = ($this->f3->get('POST.id'))           ?? false;
+            $args['student_id']   = ($this->f3->get('POST.student_id'))   ?? false;
             $args['name']         = ($this->f3->get('POST.name'))         ?? false;
             $args['email']        = ($this->f3->get('POST.email'))        ?? false;
             $args['password']     = ($this->f3->get('POST.password'))     ?? false;
@@ -83,14 +88,14 @@ class StudentController extends Controller
         try {
             // 編輯一個學生
             $args = [];
-            $args['id']           = ($this->f3->get('POST.id'))           ?? false;
+            $args['student_id']   = ($this->f3->get('POST.student_id'))   ?? false;
             $args['name']         = ($this->f3->get('POST.name'))         ?? false;
             $args['email']        = ($this->f3->get('POST.email'))        ?? false;
             // $args['password']     = ($this->f3->get('POST.password'))     ?? false;
             $args['enable']       = ($this->f3->get('POST.enable'))       ?? false;
             $args['updated_at']   = Carbon::now();
 
-            $this->studentService->editStudent($args['id'], $args);
+            $this->studentService->editStudent($args['student_id'], $args);
 
             return_json([
                 'type' => 'success'
@@ -108,13 +113,13 @@ class StudentController extends Controller
 
     }
 
-    public function getStudentById()
+    public function getStudentByStudentId()
     {
         try {
 
-            $id = ($this->f3->get('POST.id')) ?? false;
+            $id = ($this->f3->get('POST.student_id')) ?? false;
 
-            $student = $this->studentService->getStudentById($id, 'load');
+            $student = $this->studentService->getStudentByStudentId($id, 'load');
 
             if (!$student) {
                 throw new Exception('Student Not Found');

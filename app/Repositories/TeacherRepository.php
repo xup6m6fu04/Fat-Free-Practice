@@ -4,19 +4,20 @@
 namespace App\Repositories;
 
 use App\Teacher;
+use Carbon\Carbon;
 
 class TeacherRepository
 {
     public function addTeacher($args)
     {
         $teacher = new Teacher();
-        $teacher->id         = $args['id'];
+        $teacher->teacher_id = $args['teacher_id'];
         $teacher->name       = $args['name'];
         $teacher->email      = $args['email'];
         $teacher->password   = $args['password'];
         $teacher->enable     = $args['enable'];
-        $teacher->created_at = $args['created_at'];
-        $teacher->updated_at = $args['updated_at'];
+        $teacher->created_at   = Carbon::parse($args['created_at'])->timestamp;
+        $teacher->updated_at   = Carbon::parse($args['updated_at'])->timestamp;
         $teacher->save();
 
         return $teacher;
@@ -30,7 +31,7 @@ class TeacherRepository
         $teacher->email        = $args['email'];
         // $teacher->password     = $args['password'];
         $teacher->enable       = $args['enable'];
-        $teacher->updated_at   = $args['updated_at'];
+        $teacher->updated_at   = Carbon::parse($args['updated_at'])->timestamp;
         $teacher->save();
 
         return $teacher;
@@ -43,6 +44,7 @@ class TeacherRepository
         $bind_arr[0] = ($key_word) ? '' : '    1=1  ';
 
         $id            = $args['id']            ?? false;
+        $teacher_id    = $args['teacher_id']    ?? false;
         $name          = $args['name']          ?? false;
         $email         = $args['email']         ?? false;
         // $password      = $args['password']      ?? false;
@@ -58,9 +60,9 @@ class TeacherRepository
         $order        = $args['sql_order']        ?? 'created_at';
         $sort         = $args['sql_sort']         ?? 'desc';
 
-        if ($id) {
-            $bind_arr[0] .= $connect . ' id '. $symbol .' :id ';
-            $bind_arr[':id'] = $id;
+        if ($teacher_id) {
+            $bind_arr[0] .= $connect . ' teacher_id '. $symbol .' :teacher_id ';
+            $bind_arr[':teacher_id'] = $teacher_id;
         }
         if ($name) {
             $bind_arr[0] .= $connect . ' name ' . $symbol . ' :name ';
@@ -73,6 +75,10 @@ class TeacherRepository
         if ($enable) {
             $bind_arr[0] .= $connect . ' enable ' . $symbol . ' :enable ';
             $bind_arr[':enable'] = $enable;
+        }
+        if ($id) {
+            $bind_arr[0] .= ' AND id=:id ';
+            $bind_arr[':id'] = $id;
         }
         if ($created_start) {
             $bind_arr[0] .= ' AND created_at >=:created_start ';

@@ -8,7 +8,8 @@ $f3->route('POST /api/edit-student', 'App\Controllers\StudentController->editStu
 $f3->route('POST /api/edit-teacher', 'App\Controllers\TeacherController->editTeacher');
 $f3->route('POST /api/edit-school', 'App\Controllers\SchoolController->editSchool');
 $f3->route('POST /api/edit-class', 'App\Controllers\ClassController->editClass');
-$f3->route('POST /api/get-teacher-by-id', 'App\Controllers\TeacherController->getTeacherById');
-$f3->route('POST /api/get-student-by-id', 'App\Controllers\StudentController->getStudentById');
-$f3->route('POST /api/get-school-by-id', 'App\Controllers\SchoolController->getSchoolById');
-$f3->route('POST /api/get-class-by-id', 'App\Controllers\ClassController->getClassById');
+$f3->route('POST /api/get-teacher-by-teacher-id', 'App\Controllers\TeacherController->getTeacherByTeacherId');
+$f3->route('POST /api/get-student-by-student-id', 'App\Controllers\StudentController->getStudentByStudentId');
+$f3->route('POST /api/get-school-by-school-id', 'App\Controllers\SchoolController->getSchoolBySchoolId');
+$f3->route('POST /api/get-class-by-class-id', 'App\Controllers\ClassController->getClassByClassId');
+$f3->route('POST /api/get-class-by-school-id', 'App\Controllers\ClassController->getClassBySchoolId');

@@ -4,17 +4,18 @@
 namespace App\Repositories;
 
 use App\School;
+use Carbon\Carbon;
 
 class SchoolRepository
 {
     public function addSchool($args)
     {
         $school = new School();
-        $school->id           = $args['id'];
+        $school->school_id    = $args['school_id'];
         $school->name         = $args['name'];
         $school->enable       = $args['enable'];
-        $school->created_at   = $args['created_at'];
-        $school->updated_at   = $args['updated_at'];
+        $school->created_at   = Carbon::parse($args['created_at'])->timestamp;
+        $school->updated_at   = Carbon::parse($args['updated_at'])->timestamp;
         $school->save();
 
         return $school;
@@ -26,7 +27,7 @@ class SchoolRepository
 
         $school->name         = $args['name'];
         $school->enable       = $args['enable'];
-        $school->updated_at   = $args['updated_at'];
+        $school->updated_at   = Carbon::parse($args['updated_at'])->timestamp;
         $school->save();
 
         return $school;
@@ -39,6 +40,7 @@ class SchoolRepository
         $bind_arr[0] = ($key_word) ? '' : '    1=1  ';
 
         $id            = $args['id']            ?? false;
+        $school_id     = $args['school_id']     ?? false;
         $name          = $args['name']          ?? false;
         $enable        = $args['enable']        ?? false;
         $created_start = $args['created_start'] ?? false;
@@ -52,9 +54,9 @@ class SchoolRepository
         $order        = $args['sql_order']        ?? 'created_at';
         $sort         = $args['sql_sort']         ?? 'desc';
 
-        if ($id) {
-            $bind_arr[0] .= $connect . ' id '. $symbol .' :id ';
-            $bind_arr[':id'] = $id;
+        if ($school_id) {
+            $bind_arr[0] .= $connect . ' school_id '. $symbol .' :school_id ';
+            $bind_arr[':school_id'] = $school_id;
         }
         if ($name) {
             $bind_arr[0] .= $connect . ' name ' . $symbol . ' :name ';
@@ -63,6 +65,10 @@ class SchoolRepository
         if ($enable) {
             $bind_arr[0] .= $connect . ' enable ' . $symbol . ' :enable ';
             $bind_arr[':enable'] = $enable;
+        }
+        if ($id) {
+            $bind_arr[0] .= ' AND id=:id ';
+            $bind_arr[':id'] = $id;
         }
         if ($created_start) {
             $bind_arr[0] .= ' AND created_at >=:created_start ';

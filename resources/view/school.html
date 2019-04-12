@@ -15,17 +15,17 @@
         </div>
     </div>
     <!-- Add Modal -->
-    <div class="modal fade" id="AddModal" aria-labelledby="AddModalLabel" role="dialog" tabindex="-1" style="display: none;" aria-hidden="true">
+    <div class="modal fade modal-primary" id="AddModal" aria-labelledby="AddModalLabel" role="dialog" tabindex="-1" style="display: none;" aria-hidden="true">
         <div class="modal-dialog modal-simple">
             <form class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
-                    <h4 class="modal-title" id="AddModalLabel">新增學校</h4>
+                    <h4 class="modal-title" id="AddModalLabel">Add School</h4>
                 </div>
                 <div class="modal-body">
-                    <div class="row">
+                    <div class="row" style="padding-top: 20px">
                         <div class="col-xl-12 form-group">
                             <label class="form-control-label" for="id">ID</label>
                             <input type="text" class="form-control" id="id" name="id" placeholder="id" required="">
@@ -43,27 +43,28 @@
                             <br>
                             <input type="radio" name="enable" value="N"> 關
                         </div>
-                        <div class="col-md-12 float-right">
-                            <button id="add_school" class="btn btn-primary btn-outline" type="button">確定新增</button>
-                        </div>
                     </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button id="add_school" type="button" class="btn btn-primary">Save changes</button>
                 </div>
             </form>
         </div>
     </div>
 
     <!--  Edit Modal  -->
-    <div class="modal fade" id="editModal" aria-labelledby="editModalLabel" role="dialog" tabindex="-1" style="display: none;" aria-hidden="true">
+    <div class="modal fade modal-primary" id="editModal" aria-labelledby="editModalLabel" role="dialog" tabindex="-1" style="display: none;" aria-hidden="true">
         <div class="modal-dialog modal-simple">
             <form class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
-                    <h4 class="modal-title" id="editModalLabel">編輯學校</h4>
+                    <h4 class="modal-title" id="editModalLabel">Edit School</h4>
                 </div>
                 <div class="modal-body">
-                    <div class="row">
+                    <div class="row" style="padding-top: 20px">
                         <div class="col-xl-12 form-group">
                             <label class="form-control-label" for="name">Name</label>
                             <input type="text" class="form-control" id="edit_name" name="name" placeholder="name" required="">
@@ -76,10 +77,11 @@
                             <br>
                             <input type="radio" name="edit_enable" value="N"> 關
                         </div>
-                        <div class="col-md-12 float-right">
-                            <button id="edit_school" class="btn btn-primary btn-outline" type="button">確定修改</button>
-                        </div>
                     </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button id="edit_school" type="button" class="btn btn-primary">Save changes</button>
                 </div>
             </form>
         </div>
@@ -89,14 +91,14 @@
 
         <div class="panel">
             <header class="panel-heading">
-                <h3 class="panel-title">Teacher</h3>
+                <h3 class="panel-title">School</h3>
             </header>
             <div class="panel-body">
                 <div class="row">
                     <div class="col-md-6">
                         <div class="mb-15">
                             <button data-target="#AddModal" data-toggle="modal" class="btn btn-outline btn-primary" type="button">
-                                <i class="icon wb-plus" aria-hidden="true"></i> Add Teacher
+                                <i class="icon wb-plus" aria-hidden="true"></i> Add School
                             </button>
                         </div>
                     </div>
@@ -224,7 +226,6 @@
         timer: 3000
     });
 
-    // 編輯學生按鈕點擊 , Ajax 撈資料渲染到 Html
     $(document).on('click', '#edit_school_modal', function(){
         let id = $(this).data('id');
         $.ajax({
@@ -266,7 +267,6 @@
         });
     });
 
-    // 確定編輯學生
     $(document).on('click', '#edit_school', function () {
 
         let edit_data_arr = {

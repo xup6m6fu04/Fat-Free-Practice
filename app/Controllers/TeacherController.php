@@ -52,11 +52,11 @@ class TeacherController extends Controller
         try {
             // 新增一個老師
             $args = [];
-            $args['id']         = ($this->f3->get('POST.id'))        ?? false;
-            $args['name']       = ($this->f3->get('POST.name'))      ?? false;
-            $args['email']      = ($this->f3->get('POST.email'))     ?? false;
-            $args['password']   = ($this->f3->get('POST.password'))  ?? false;
-            $args['enable']     = ($this->f3->get('POST.enable'))    ?? false;
+            $args['teacher_id'] = ($this->f3->get('POST.teacher_id')) ?? false;
+            $args['name']       = ($this->f3->get('POST.name'))       ?? false;
+            $args['email']      = ($this->f3->get('POST.email'))      ?? false;
+            $args['password']   = ($this->f3->get('POST.password'))   ?? false;
+            $args['enable']     = ($this->f3->get('POST.enable'))     ?? false;
             $args['created_at'] = Carbon::now();
             $args['updated_at'] = Carbon::now();
 
@@ -82,14 +82,14 @@ class TeacherController extends Controller
         try {
             // 編輯一個老師
             $args = [];
-            $args['id']           = ($this->f3->get('POST.id'))           ?? false;
+            $args['teacher_id']   = ($this->f3->get('POST.teacher_id'))   ?? false;
             $args['name']         = ($this->f3->get('POST.name'))         ?? false;
             $args['email']        = ($this->f3->get('POST.email'))        ?? false;
             // $args['password']     = ($this->f3->get('POST.password'))     ?? false;
             $args['enable']       = ($this->f3->get('POST.enable'))       ?? false;
             $args['updated_at']   = Carbon::now();
 
-            $this->teacherService->editTeacher($args['id'], $args);
+            $this->teacherService->editTeacher($args['teacher_id'], $args);
 
             return_json([
                 'type' => 'success'
@@ -107,11 +107,11 @@ class TeacherController extends Controller
 
     }
 
-    public function getTeacherById()
+    public function getTeacherByTeacherId()
     {
         try {
-            $id = ($this->f3->get('POST.id')) ?? false;
-            $teacher = $this->teacherService->getTeacherById($id, 'load');
+            $teacher_id = ($this->f3->get('POST.teacher_id')) ?? false;
+            $teacher = $this->teacherService->getTeacherByTeacherId($teacher_id, 'load');
 
             if (!$teacher) {
                 throw new Exception('Teacher Not Found');

@@ -28,7 +28,7 @@ class SchoolService
     public function countSchoolsByKeyWord($key_word)
     {
         $args = [
-            'id'        => $key_word,
+            'school_id' => $key_word,
             'name'      => $key_word,
             'enable'    => $key_word
         ];
@@ -36,10 +36,15 @@ class SchoolService
         return $this->schoolRepository->getSchools($args, 'count', true);
     }
 
+    /**
+     * @param $args
+     * @param bool $key_word
+     * @return mixed
+     */
     public function getSchoolByParams($args, $key_word = false)
     {
         if ($key_word) {
-            $args['id']        = $key_word;
+            $args['school_id'] = $key_word;
             $args['name']      = $key_word;
             $args['enable']    = $key_word;
         }
@@ -48,13 +53,13 @@ class SchoolService
         return $this->schoolRepository->getSchools($args, 'find', $key_word);
     }
 
-    public function getSchoolById($id, $type = 'load')
+    public function getSchoolBySchoolId($school_id, $type = 'load')
     {
-        if (!$id) {
-            throw new Exception('ID is empty');
+        if (!$school_id) {
+            throw new Exception('School ID is empty');
         }
 
-        return $this->schoolRepository->getSchools(['id' => $id], $type);
+        return $this->schoolRepository->getSchools(['school_id' => $school_id], $type);
     }
 
     public function addSchool($args)
@@ -70,13 +75,13 @@ class SchoolService
         return $this->schoolRepository->addSchool($args);
     }
 
-    public function editSchool($id, $args)
+    public function editSchool($school_id, $args)
     {
-        if (!$args['id']) {
-            throw new Exception('ID is Empty');
+        if (!$args['school_id']) {
+            throw new Exception('School ID is Empty');
         }
 
-        $school = $this->getSchoolById($args['id']);
+        $school = $this->getSchoolBySchoolId($args['school_id']);
 
         if (!$school) {
             throw new Exception('School does not exist');
@@ -90,6 +95,6 @@ class SchoolService
             // TODO 檢查格式
         }
 
-        return $this->schoolRepository->editSchool($id, $args);
+        return $this->schoolRepository->editSchool($school_id, $args);
     }
 }

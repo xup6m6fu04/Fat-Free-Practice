@@ -4,17 +4,17 @@
 namespace App\Repositories;
 
 use App\ClassTeacher;
+use Carbon\Carbon;
 
 class ClassTeacherRepository
 {
     public function addClassTeacher($args)
     {
         $class_teacher = new ClassTeacher();
-        $class_teacher->id           = $args['id'];
         $class_teacher->class_id     = $args['class_id'];
         $class_teacher->teacher_id   = $args['teacher_id'];
-        $class_teacher->created_at   = $args['created_at'];
-        $class_teacher->updated_at   = $args['updated_at'];
+        $class_teacher->created_at   = Carbon::parse($args['created_at'])->timestamp;
+        $class_teacher->updated_at   = Carbon::parse($args['updated_at'])->timestamp;
         $class_teacher->save();
 
         return $class_teacher;
@@ -26,7 +26,7 @@ class ClassTeacherRepository
 
         $class_teacher->class_id     = $args['class_id'];
         $class_teacher->teacher_id   = $args['teacher_id'];
-        $class_teacher->updated_at   = $args['updated_at'];
+        $class_teacher->updated_at   = Carbon::parse($args['updated_at'])->timestamp;
         $class_teacher->save();
 
         return $class_teacher;

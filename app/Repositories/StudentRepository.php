@@ -4,33 +4,34 @@
 namespace App\Repositories;
 
 use App\Student;
+use Carbon\Carbon;
 
 class StudentRepository
 {
     public function addStudent($args)
     {
         $student = new Student();
-        $student->id           = $args['id'];
+        $student->student_id   = $args['student_id'];
         $student->name         = $args['name'];
         $student->email        = $args['email'];
         $student->password     = $args['password'];
         $student->enable       = $args['enable'];
-        $student->created_at   = $args['created_at'];
-        $student->updated_at   = $args['updated_at'];
+        $student->created_at   = Carbon::parse($args['created_at'])->timestamp;
+        $student->updated_at   = Carbon::parse($args['updated_at'])->timestamp;
         $student->save();
 
         return $student;
     }
 
-    public function editStudent($id, $args)
+    public function editStudent($student_id, $args)
     {
-        $student = $this->getStudents(['id' => $id], 'load');
+        $student = $this->getStudents(['student_id' => $student_id], 'load');
 
         $student->name         = $args['name'];
         $student->email        = $args['email'];
         // $student->password     = $args['password'];
         $student->enable       = $args['enable'];
-        $student->updated_at   = $args['updated_at'];
+        $student->updated_at   = Carbon::parse($args['updated_at'])->timestamp;
         $student->save();
 
         return $student;
@@ -43,6 +44,7 @@ class StudentRepository
         $bind_arr[0] = ($key_word) ? '' : '    1=1  ';
 
         $id            = $args['id']            ?? false;
+        $student_id    = $args['student_id']    ?? false;
         $name          = $args['name']          ?? false;
         $email         = $args['email']         ?? false;
         // $password      = $args['password']      ?? false;
@@ -58,9 +60,9 @@ class StudentRepository
         $order        = $args['sql_order']        ?? 'created_at';
         $sort         = $args['sql_sort']         ?? 'desc';
 
-        if ($id) {
-            $bind_arr[0] .= $connect . ' id '. $symbol .' :id ';
-            $bind_arr[':id'] = $id;
+        if ($student_id) {
+            $bind_arr[0] .= $connect . ' student_id '. $symbol .' :student_id ';
+            $bind_arr[':student_id'] = $student_id;
         }
         if ($name) {
             $bind_arr[0] .= $connect . ' name ' . $symbol . ' :name ';
@@ -73,6 +75,10 @@ class StudentRepository
         if ($enable) {
             $bind_arr[0] .= $connect . ' enable ' . $symbol . ' :enable ';
             $bind_arr[':enable'] = $enable;
+        }
+        if ($id) {
+            $bind_arr[0] .= ' AND id=:id ';
+            $bind_arr[':id'] = $id;
         }
         if ($created_start) {
             $bind_arr[0] .= ' AND created_at >=:created_start ';

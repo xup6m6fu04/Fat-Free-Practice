@@ -28,10 +28,10 @@ class TeacherService
     public function countTeachersByKeyWord($key_word)
     {
         $args = [
-            'id'        => $key_word,
-            'name'      => $key_word,
-            'email'     => $key_word,
-            'enable'    => $key_word
+            'teacher_id' => $key_word,
+            'name'       => $key_word,
+            'email'      => $key_word,
+            'enable'     => $key_word
         ];
 
         return $this->teacherRepository->getTeachers($args, 'count', true);
@@ -40,23 +40,23 @@ class TeacherService
     public function getTeacherByParams($args, $key_word = false)
     {
         if ($key_word) {
-            $args['id']        = $key_word;
-            $args['name']      = $key_word;
-            $args['email']     = $key_word;
-            $args['enable']    = $key_word;
+            $args['teacher_id'] = $key_word;
+            $args['name']       = $key_word;
+            $args['email']      = $key_word;
+            $args['enable']     = $key_word;
         }
 
         // TODO : 好像該做點什麼
         return $this->teacherRepository->getTeachers($args, 'find', $key_word);
     }
 
-    public function getTeacherById($id, $type = 'load')
+    public function getTeacherByTeacherId($teacher_id, $type = 'load')
     {
-        if (!$id) {
-            throw new Exception('ID is empty');
+        if (!$teacher_id) {
+            throw new Exception('Teacher ID is empty');
         }
 
-        return $this->teacherRepository->getTeachers(['id' => $id], $type);
+        return $this->teacherRepository->getTeachers(['teacher_id' => $teacher_id], $type);
     }
 
     public function addTeacher($args)
@@ -74,15 +74,15 @@ class TeacherService
         return $this->teacherRepository->addTeacher($args);
     }
 
-    public function editTeacher($id, $args)
+    public function editTeacher($teacher_id, $args)
     {
-        if (!$args['id']) {
-            throw new Exception('ID is Empty');
+        if (!$args['teacher_id']) {
+            throw new Exception('Teacher ID is Empty');
         }
 
-        $student = $this->getTeacherById($args['id']);
+        $teacher = $this->getTeacherByTeacherId($args['teacher_id']);
 
-        if (!$student) {
+        if (!$teacher) {
             throw new Exception('Teacher does not exist');
         }
 
@@ -94,6 +94,6 @@ class TeacherService
             // TODO 檢查格式
         }
 
-        return $this->teacherRepository->editTeacher($id, $args);
+        return $this->teacherRepository->editTeacher($teacher_id, $args);
     }
 }

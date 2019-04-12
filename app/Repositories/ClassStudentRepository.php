@@ -4,17 +4,17 @@
 namespace App\Repositories;
 
 use App\ClassStudent;
+use Carbon\Carbon;
 
 class ClassStudentRepository
 {
     public function addClassStudent($args)
     {
         $class_student = new ClassStudent();
-        $class_student->id           = $args['id'];
         $class_student->class_id     = $args['class_id'];
         $class_student->student_id   = $args['student_id'];
-        $class_student->created_at   = $args['created_at'];
-        $class_student->updated_at   = $args['updated_at'];
+        $class_student->created_at   = Carbon::parse($args['created_at'])->timestamp;
+        $class_student->updated_at   = Carbon::parse($args['updated_at'])->timestamp;
         $class_student->save();
 
         return $class_student;
@@ -26,7 +26,7 @@ class ClassStudentRepository
 
         $class_student->class_id     = $args['class_id'];
         $class_student->student_id   = $args['student_id'];
-        $class_student->updated_at   = $args['updated_at'];
+        $class_student->updated_at   = Carbon::parse($args['updated_at'])->timestamp;
         $class_student->save();
 
         return $class_student;
