@@ -3,18 +3,18 @@
 
 namespace App\Services;
 
-use App\Repositories\ClassStudentRepository;
+use App\Repositories\ClassTeacherRepository;
 use App\Repositories\SchoolRepository;
 use Exception;
 
-class ClassStudentService
+class ClassTeacherService
 {
-    protected $classStudentRepository;
+    protected $classTeacherRepository;
     protected $schoolRepository;
 
     public function __construct()
     {
-        $this->classStudentRepository = new ClassStudentRepository();
+        $this->classTeacherRepository = new ClassTeacherRepository();
         $this->schoolRepository = new SchoolRepository();
     }
 
@@ -24,21 +24,21 @@ class ClassStudentService
             throw new Exception('Class ID Not Found');
         }
 
-        return $this->classStudentRepository->getClassStudents(['class_id' => $class_id]);
+        return $this->classTeacherRepository->getClassTeachers(['class_id' => $class_id]);
     }
 
     public function getByParams($args)
     {
-        return $this->classStudentRepository->getClassStudents($args);
+        return $this->classTeacherRepository->getClassTeachers($args);
     }
 
-    public function getByStudentId($student_id, $type = 'load')
+    public function getByTeacherId($student_id, $type = 'load')
     {
         if (!$student_id) {
-            throw new Exception('Student ID Not Found');
+            throw new Exception('Teacher ID Not Found');
         }
 
-        return $this->classStudentRepository->getClassStudents(['student_id' => $student_id], $type);
+        return $this->classTeacherRepository->getClassTeachers(['student_id' => $student_id], $type);
     }
 
     public function addSchool($args)
@@ -51,19 +51,19 @@ class ClassStudentService
             // TODO 檢查格式
         }
 
-        return $this->classStudentRepository->addClassStudent($args);
+        return $this->classTeacherRepository->addClassTeacher($args);
     }
 
-    public function editClassStudent($student_id, $args)
+    public function editClassTeacher($student_id, $args)
     {
         if (!$args['class_id']) {
             throw new Exception('Class ID is Empty');
         }
 
         if (!$student_id) {
-            throw new Exception('Student ID is Empty');
+            throw new Exception('Teacher ID is Empty');
         }
 
-        return $this->classStudentRepository->editClassStudent($student_id, $args);
+        return $this->classTeacherRepository->editClassTeacher($student_id, $args);
     }
 }

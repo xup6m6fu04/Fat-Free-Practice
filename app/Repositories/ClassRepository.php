@@ -101,6 +101,7 @@ class ClassRepository
         $bind_arr[0] = ($key_word) ? '' : '    1=1  ';
 
         $id            = $args['id']            ?? false;
+        $class_id      = $args['class_id']      ?? false;
         $school_id     = $args['school_id']     ?? false;
         $name          = $args['name']          ?? false;
         // $password      = $args['password']      ?? false;
@@ -119,6 +120,10 @@ class ClassRepository
         if ($id) {
             $bind_arr[0] .= $connect . ' id '. $symbol .' :id ';
             $bind_arr[':id'] = $id;
+        }
+        if ($class_id) {
+            $bind_arr[0] .= $connect . ' class_id '. $symbol .' :class_id ';
+            $bind_arr[':class_id'] = $class_id;
         }
         if ($school_id) {
             $bind_arr[0] .= $connect . ' school_id ' . $symbol . ' :school_id ';

@@ -2,6 +2,8 @@
 
 namespace App\Controllers;
 
+use App\Services\ClassService;
+use App\Services\ClassStudentService;
 use App\Services\SchoolService;
 use App\Services\StudentService;
 use App\Traits\LoggerTrait;
@@ -15,6 +17,8 @@ class StudentController extends Controller
     protected $db;
     protected $studentService;
     protected $schoolService;
+    protected $classStudentService;
+    protected $classService;
 
     use LoggerTrait;
 
@@ -25,6 +29,8 @@ class StudentController extends Controller
         $this->db = $f3->get('db');
         $this->studentService = new StudentService();
         $this->schoolService = new SchoolService();
+        $this->classStudentService = new ClassStudentService();
+        $this->classService = new ClassService();
     }
 
     public function pageStudent()
@@ -117,9 +123,9 @@ class StudentController extends Controller
     {
         try {
 
-            $id = ($this->f3->get('POST.student_id')) ?? false;
+            $student_id = ($this->f3->get('POST.student_id')) ?? false;
 
-            $student = $this->studentService->getStudentByStudentId($id, 'load');
+            $student = $this->studentService->getStudentByStudentId($student_id, 'load');
 
             if (!$student) {
                 throw new Exception('Student Not Found');
@@ -142,6 +148,41 @@ class StudentController extends Controller
         }
     }
 
+    public function getClassAndSchoolByStudentId()
+    {
+        try {
+            $student_id = ($this->f3->get('POST.student_id')) ?? false;
 
+            $student = $this->studentService->getStudentByStudentId($student_id, 'load');
+
+            if (!$student) {
+                throw new Exception('Student Not Found');
+            }
+
+            $class_student = $this->classStudentService->getByStudentId($student_id);
+            $class = $this->classService->getClassByClassId($class_student->class_id);
+            $school = $this->schoolService->getSchoolBySchoolId($class->school_id);
+            $all_class = $this->classService->getClassBySchoolId($school->school_id);
+
+            return_json([
+                'type'          => 'success',
+                'student'       => to_Array($student),
+                'class_student' => to_Array($class_student),
+                'class'         => to_Array($class),
+                'school'        => to_Array($school),
+                'all_class'     => to_Array_two($all_class)
+            ]);
+
+        } catch (Exception $ex) {
+
+            $this->Log($ex, Logger::ERROR);
+
+            return_json([
+                'type' => 'error',
+                'message' => $ex->getMessage()
+            ]);
+
+        }
+    }
 
 }

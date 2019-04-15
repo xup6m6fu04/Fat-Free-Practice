@@ -23,13 +23,13 @@ class ClassService
         return $this->classRepository->getClasses();
     }
 
-    public function getClassById($id, $type = 'load')
+    public function getClassByClassId($class_id, $type = 'load')
     {
-        if (!$id) {
+        if (!$class_id) {
             throw new Exception('ID is empty');
         }
 
-        return $this->classRepository->getClasses(['id' => $id], $type);
+        return $this->classRepository->getClasses(['class_id' => $class_id], $type);
     }
 
     public function countAllClasses()

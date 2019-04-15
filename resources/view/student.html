@@ -52,9 +52,7 @@
                         </div>
                         <div class="col-xl-9">
                             <select id="assign_class" class="form-control">
-                                <option>Option 1</option>
-                                <option>Option 2</option>
-                                <option>Option 3</option>
+
                             </select>
                         </div>
                     </div>
@@ -489,7 +487,7 @@
 
                     $('#assign_class').children().remove();
                     for (let key in result.class) {
-                        $('#assign_class').append("<option value='" + result.class[key].id + "'>"+ result.class[key].name +"</option>");
+                        $('#assign_class').append("<option value='" + result.class[key].class_id + "'>"+ result.class[key].name +"</option>");
                     }
 
                 } else if (result.type === 'error') {
@@ -518,8 +516,35 @@
     });
 
     $(document).on('click', '#confirm_assign', function(){
-        console.log($('#assign_school').val() + ',' + $('#assign_school').find("option:selected").text());
-        console.log($('#assign_class').val() + ',' + $('#assign_class').find("option:selected").text());
+        let assign_student_id = $('#assign_student_id').val();
+        let assign_school_id = $('#assign_school').val();
+        let assign_class_id= $('#assign_class').val();
+        $.ajax({
+            type: "post",
+            url: "/api/assign-student",
+            dataType: "json",
+            data: {
+                assign_student_id: assign_student_id,
+                assign_school_id: assign_school_id,
+                assign_class_id: assign_class_id,
+            },
+            success: function (result) {
+                if (result.type === 'success') {
+                    location.reload()
+                } else if (result.type === 'error') {
+                    toast({
+                        type: 'error',
+                        title: result.message
+                    })
+                }
+            },
+            error: function () {
+                toast({
+                    type: 'error',
+                    title: '系統異常'
+                })
+            }
+        });
     });
 
     $(document).on('click', '.change-page', function(){
@@ -531,7 +556,37 @@
     });
 
     $(document).on('click', '#assign_modal', function(){
-        $('#assign_student_id').val($(this).data('id'));
+        let student_id = $(this).data('id');
+        $('#assign_student_id').val(student_id);
+        $.ajax({
+            type: "post",
+            url: "/api/get-class-and-school-by-student-id",
+            dataType: "json",
+            data: {
+                student_id: student_id,
+            },
+            success: function (result) {
+                if (result.type === 'success') {
+                    $('#assign_school').val(result.school.school_id);
+                    $('#assign_class').children().remove();
+                    for (let key in result.all_class) {
+                        $('#assign_class').append("<option value='" + result.all_class[key].class_id + "'>"+ result.all_class[key].name +"</option>");
+                    }
+                    $('#assign_class').val(result.class.class_id);
+                } else if (result.type === 'error') {
+                    toast({
+                        type: 'error',
+                        title: result.message
+                    })
+                }
+            },
+            error: function () {
+                toast({
+                    type: 'error',
+                    title: '系統異常'
+                })
+            }
+        });
     });
 
 </script>

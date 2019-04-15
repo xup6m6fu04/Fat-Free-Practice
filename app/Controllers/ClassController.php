@@ -6,8 +6,6 @@ namespace App\Controllers;
 use App\Services\ClassService;
 use App\Services\ClassStudentService;
 use App\Services\SchoolService;
-use App\Services\VClassStudentService;
-use App\Services\VClassTeacherService;
 use App\Traits\LoggerTrait;
 use Carbon\Carbon;
 use Exception;
@@ -20,8 +18,6 @@ class  ClassController extends Controller
     protected $classService;
     protected $schoolService;
     protected $classStudentService;
-    protected $vClassStudentService;
-    protected $vClassTeacherService;
 
     use LoggerTrait;
 
@@ -33,15 +29,13 @@ class  ClassController extends Controller
         $this->classService = new ClassService();
         $this->schoolService = new SchoolService();
         $this->classStudentService = new ClassStudentService();
-        $this->vClassStudentService = new VClassStudentService();
-        $this->vClassTeacherService = new VClassTeacherService();
     }
 
     public function pageClass()
     {
         try {
             $school_id = ($this->f3->get('GET.school_id')) ?? false;
-            $school = $this->schoolService->getSchoolById($school_id);
+            $school = $this->schoolService->getSchoolBySchoolId($school_id);
 
             if (!$school) {
                 throw new Exception('School Not Found');
