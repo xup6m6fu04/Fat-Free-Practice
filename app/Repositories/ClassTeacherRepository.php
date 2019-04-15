@@ -32,8 +32,12 @@ class ClassTeacherRepository
         return $class_teacher;
     }
 
-    public function getClassTeachers($args = [], $type = 'find')
+    public function getClassTeachers($args = [], $type = 'find', $key_word = false)
     {
+        $connect = ($key_word) ? 'OR ' : 'AND ';
+        $symbol = ($key_word) ? 'like ' : '= ';
+        $bind_arr[0] = ($key_word) ? '' : '    1=1  ';
+
         $id            = $args['id']            ?? false;
         $class_id      = $args['class_id']      ?? false;
         $teacher_id    = $args['teacher_id']    ?? false;
@@ -42,36 +46,46 @@ class ClassTeacherRepository
         $updated_start = $args['updated_start'] ?? false;
         $updated_end   = $args['updated_at']    ?? false;
 
-        $bind_arr[0] = ' 1=1 ';
+        // SQL Params
+        $limit_start  = $args['sql_limit_start']  ?? 0;
+        $limit_end    = $args['sql_limit_end']    ?? 10;
+        $order        = $args['sql_order']        ?? 'created_at';
+        $sort         = $args['sql_sort']         ?? 'desc';
 
         if ($id) {
-            $bind_arr[0] .= ' AND id=:id ';
+            $bind_arr[0] .= $connect . ' id '. $symbol .' :id ';
             $bind_arr[':id'] = $id;
         }
         if ($class_id) {
-            $bind_arr[0] .= ' AND class_id=:class_id ';
-            $bind_arr[':class_id'] = $class_id;
+            $bind_arr[0] .= $connect . '$ class_id ' . $symbol . '$ :class_id ';
+            $bind_arr['$:class_id'] = $class_id;
         }
         if ($teacher_id) {
-            $bind_arr[0] = ' AND teacher_id=:teacher_id ';
+            $bind_arr[0] .= $connect . ' teacher_id ' . $symbol . ' :teacher_id ';
             $bind_arr[':teacher_id'] = $teacher_id;
         }
         if ($created_start) {
-            $bind_arr[0] = ' AND created_at >=:created_start ';
+            $bind_arr[0] .= ' AND created_at >=:created_start ';
             $bind_arr[':created_start'] = $created_start;
         }
         if ($created_end) {
-            $bind_arr[0] = ' AND created_at <:created_end ';
+            $bind_arr[0] .= ' AND created_at <:created_end ';
             $bind_arr[':created_end'] = $created_end;
         }
         if ($updated_start) {
-            $bind_arr[0] = ' AND updated_at >=:updated_start ';
+            $bind_arr[0] .= ' AND updated_at >=:updated_start ';
             $bind_arr[':updated_start'] = $updated_start;
         }
         if ($updated_end) {
-            $bind_arr[0] = ' AND updated_at <:updated_end ';
+            $bind_arr[0] .= ' AND updated_at <:updated_end ';
             $bind_arr[':updated_end'] = $updated_end;
         }
+
+        $bind_arr[0] .= ' ORDER BY ' . $order . ' ' . $sort . ' LIMIT :limit_start, :limit_end ';
+        $bind_arr[':limit_start'] = $limit_start;
+        $bind_arr[':limit_end'] = $limit_end;
+
+        $bind_arr[0] = substr($bind_arr[0], 3);
 
         $class_teacher = new ClassTeacher();
         return $class_teacher->$type($bind_arr);

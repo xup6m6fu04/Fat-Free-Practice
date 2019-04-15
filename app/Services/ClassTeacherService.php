@@ -32,13 +32,13 @@ class ClassTeacherService
         return $this->classTeacherRepository->getClassTeachers($args);
     }
 
-    public function getByTeacherId($student_id, $type = 'load')
+    public function getByTeacherId($teacher_id, $type = 'load')
     {
-        if (!$student_id) {
+        if (!$teacher_id) {
             throw new Exception('Teacher ID Not Found');
         }
 
-        return $this->classTeacherRepository->getClassTeachers(['student_id' => $student_id], $type);
+        return $this->classTeacherRepository->getClassTeachers(['teacher_id' => $teacher_id], $type);
     }
 
     public function addSchool($args)

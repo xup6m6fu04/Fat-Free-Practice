@@ -32,6 +32,11 @@ class ClassService
         return $this->classRepository->getClasses(['class_id' => $class_id], $type);
     }
 
+    public function getClassInClassId($string)
+    {
+        return $this->classRepository->getClassesInClassId($string);
+    }
+
     public function countAllClasses()
     {
         return $this->classRepository->getClasses([], 'count');

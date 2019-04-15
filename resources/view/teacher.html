@@ -690,10 +690,6 @@
             success: function (result) {
                 if (result.type === 'success') {
 
-                    $('#assign_class').children().remove();
-                    for (let key in result.class) {
-                        $('#assign_class').append("<option value='" + result.class[key].class_id + "'>"+ result.class[key].name +"</option>");
-                    }
 
                 } else if (result.type === 'error') {
                     toast({
@@ -721,21 +717,17 @@
     });
 
     $(document).on('click', '#confirm_assign', function(){
-        let assign_student_id = $('#assign_student_id').val();
-        let assign_school_id = $('#assign_school').val();
-        let assign_class_id= $('#assign_class').val();
+        let assign_teacher_id = $('#assign_teacher_id').val();
         $.ajax({
             type: "post",
-            url: "/api/assign-teacher",
+            url: "/api/get-class-and-school-by-teacher-id",
             dataType: "json",
             data: {
-                assign_student_id: assign_student_id,
-                assign_school_id: assign_school_id,
-                assign_class_id: assign_class_id,
+                teacher_id: assign_teacher_id,
             },
             success: function (result) {
                 if (result.type === 'success') {
-                    location.reload()
+                    console.log(result);
                 } else if (result.type === 'error') {
                     toast({
                         type: 'error',

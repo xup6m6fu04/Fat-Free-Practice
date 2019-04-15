@@ -4,10 +4,24 @@
 namespace App\Repositories;
 
 use App\Classes;
+use App\Traits\LoggerTrait;
 use Carbon\Carbon;
+use Monolog\Logger;
 
 class ClassRepository
 {
+    use LoggerTrait;
+
+    protected $db;
+    protected $f3;
+
+    public function __construct()
+    {
+        global $f3;
+        $this->f3 = $f3;
+        $this->db = $f3->get('db');
+    }
+
     public function addClass($args)
     {
         $class = new Classes();
@@ -32,6 +46,14 @@ class ClassRepository
         $class->save();
 
         return $class;
+    }
+
+    public function getClassesInClassId($string)
+    {
+        $classes = new Classes();
+        $sql = " SELECT * from " . $classes->getTable() . " WHERE `class_id` IN ( " . $string . " ) ORDER BY `created_at` desc ";
+        $res = $this->db->exec($sql);
+        return $res;
     }
 
     public function getClassesBySchoolId($args = [], $type = 'find', $key_word = false)

@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Services\ClassService;
 use App\Services\ClassStudentService;
+use App\Services\ClassTeacherService;
 use App\Services\SchoolService;
 use App\Services\TeacherService;
 use App\Traits\LoggerTrait;
@@ -19,6 +20,7 @@ class TeacherController extends Controller
     protected $schoolService;
     protected $classStudentService;
     protected $classService;
+    protected $classTeacherService;
 
     use LoggerTrait;
 
@@ -31,6 +33,7 @@ class TeacherController extends Controller
         $this->schoolService = new SchoolService();
         $this->classStudentService = new ClassStudentService();
         $this->classService = new ClassService();
+        $this->classTeacherService = new ClassTeacherService();
     }
 
     public function pageTeacher()
@@ -155,19 +158,27 @@ class TeacherController extends Controller
                 throw new Exception('Teacher Not Found');
             }
 
-            $class_student = $this->class->getByStudentId($teacher_id);
-            $class = $this->classService->getClassByClassId($class_student->class_id);
-            $school = $this->schoolService->getSchoolBySchoolId($class->school_id);
-            $all_class = $this->classService->getClassBySchoolId($school->school_id);
+            $class_teacher = $this->classTeacherService->getByTeacherId($teacher_id, 'find');
+            $string = '';
+            foreach ($class_teacher as $ctv) {
+                $string .= "'" . $ctv->class_id . "',";
+            }
+            $string = substr($string, 0, -1);
 
-            return_json([
-                'type'          => 'success',
-                'student'       => to_Array($student),
-                'class_student' => to_Array($class_student),
-                'class'         => to_Array($class),
-                'school'        => to_Array($school),
-                'all_class'     => to_Array_two($all_class)
-            ]);
+            $class = $this->classService->getClassInClassId($string);
+            echo "<pre>"; print_r($class); echo "</pre>"; exit;
+
+//            $school = $this->schoolService->getSchoolBySchoolId($class->school_id);
+//            $all_class = $this->classService->getClassBySchoolId($school->school_id);
+//
+//            return_json([
+//                'type'          => 'success',
+//                'student'       => to_Array($student),
+//                'class_student' => to_Array($class_student),
+//                'class'         => to_Array($class),
+//                'school'        => to_Array($school),
+//                'all_class'     => to_Array_two($all_class)
+//            ]);
 
         } catch (Exception $ex) {
 

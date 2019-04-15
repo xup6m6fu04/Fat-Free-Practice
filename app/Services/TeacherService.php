@@ -50,7 +50,7 @@ class TeacherService
         return $this->teacherRepository->getTeachers($args, 'find', $key_word);
     }
 
-    public function getTeacherByTeacherId($teacher_id, $type = 'load')
+    public function getTeacherByTeacherId($teacher_id, $type = 'find')
     {
         if (!$teacher_id) {
             throw new Exception('Teacher ID is empty');
