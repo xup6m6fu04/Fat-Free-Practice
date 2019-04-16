@@ -56,11 +56,10 @@
                             </select>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row" style="padding-top: 20px">
                         <div class="col-xl-2"></div>
                         <div class="col-xl-8 error_div alert dark alert-icon alert-danger alert-dismissible" style="display: none;" role="alert">
-                            <i class="icon wb-close" aria-hidden="true"></i> <p class="error_text">The daily
-                            report has failed</p>
+                            <i class="icon wb-close" aria-hidden="true"></i> <p class="error_text"></p>
                         </div>
                         <div class="col-xl-2"></div>
                     </div>
@@ -112,6 +111,13 @@
                             <input type="radio" name="enable" value="N"> 關
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-xl-2"></div>
+                        <div class="col-xl-8 error_div alert dark alert-icon alert-danger alert-dismissible" style="display: none;" role="alert">
+                            <i class="icon wb-close" aria-hidden="true"></i> <p class="error_text"></p>
+                        </div>
+                        <div class="col-xl-2"></div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -150,6 +156,13 @@
                             <br>
                             <input type="radio" name="edit_enable" value="N"> 關
                         </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xl-2"></div>
+                        <div class="col-xl-8 error_div alert dark alert-icon alert-danger alert-dismissible" style="display: none;" role="alert">
+                            <i class="icon wb-close" aria-hidden="true"></i> <p class="error_text"></p>
+                        </div>
+                        <div class="col-xl-2"></div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -305,7 +318,12 @@
         timer: 3000
     });
 
+    $(document).on('click', '#AddModal', function(){
+        $('.error_div').hide();
+    });
+
     $(document).on('click', '#edit_student_modal', function(){
+        $('.error_div').hide();
         let student_id = $(this).data('id');
         $.ajax({
             type: "post",
@@ -333,7 +351,9 @@
                     toast({
                         type: 'error',
                         title: result.message
-                    })
+                    });
+                    $('.error_div').show();
+                    $('.error_text').text(result.message);
                 }
             },
             error: function () {
@@ -395,7 +415,9 @@
                     toast({
                         type: 'error',
                         title: result.message
-                    })
+                    });
+                    $('.error_div').show();
+                    $('.error_text').text(result.message);
                 }
             },
             error: function () {
@@ -450,7 +472,9 @@
                     toast({
                         type: 'error',
                         title: result.message
-                    })
+                    });
+                    $('.error_div').show();
+                    $('.error_text').text(result.message);
                 }
             },
             error: function () {
@@ -482,6 +506,7 @@
     });
 
     $(document).on('change', '#assign_school', function(){
+        $('.error_div').hide();
         let school_id = $(this).val();
         $.ajax({
             type: "post",
@@ -502,7 +527,9 @@
                     toast({
                         type: 'error',
                         title: result.message
-                    })
+                    });
+                    $('.error_div').show();
+                    $('.error_text').text(result.message);
                 }
             },
             error: function () {
@@ -543,7 +570,9 @@
                     toast({
                         type: 'error',
                         title: result.message
-                    })
+                    });
+                    $('.error_div').show();
+                    $('.error_text').text(result.message);
                 }
             },
             error: function () {
@@ -564,6 +593,7 @@
     });
 
     $(document).on('click', '#assign_modal', function(){
+        $('.error_div').hide();
         let student_id = $(this).data('id');
         $('#assign_student_id').val(student_id);
         $.ajax({
@@ -592,7 +622,9 @@
                 toast({
                     type: 'error',
                     title: '系統異常'
-                })
+                });
+                $('.error_div').show();
+                $('.error_text').text(result.message);
             }
         });
     });
