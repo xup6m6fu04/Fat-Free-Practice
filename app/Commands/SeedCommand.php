@@ -53,12 +53,13 @@ class SeedCommand
         $students = $this->studentRepository->getStudents([
             'sql_limit_end' => 999999
         ]);
-        $count_class = count($this->classRepository->getClasses());
+        $count_class = 20;
         $offset = 0;
         foreach ($students as $student) {
             $class = $this->classRepository->getClasses([
+                'school_id'       => $student->school_id,
                 'sql_limit_start' => $offset,
-                'sql_limit_end' => 1,
+                'sql_limit_end'   => 1,
             ], 'load');
             $args = [
                 'class_id' => $class->class_id,
@@ -79,12 +80,13 @@ class SeedCommand
         $teachers = $this->teacherRepository->getTeachers([
             'sql_limit_end' => 999999
         ]);
-        $count_class = count($this->classRepository->getClasses());
+        $count_class = 20;
         $offset = 0;
         foreach ($teachers as $teacher) {
             $class = $this->classRepository->getClasses([
+                'school_id'       => $teacher->school_id,
                 'sql_limit_start' => $offset,
-                'sql_limit_end' => 1,
+                'sql_limit_end'   => 1,
             ], 'load');
             $args = [
                 'class_id' => $class->class_id,
@@ -108,13 +110,20 @@ class SeedCommand
         $this->seedTeacher();
     }
 
-    public function seedTeacher($num = 2000)
+    public function seedTeacher($num = 400)
     {
+        $count_school = count($this->schoolRepository->getSchools());
         $count = ($this->f3->get('GET.count')) ?? $num;
+        $offset = 0;
         for($i = 0; $i < $count; $i++) {
+            $school = $this->schoolRepository->getSchools([
+                'sql_limit_start' => $offset,
+                'sql_limit_end' => 1,
+            ], 'load');
             $this->teacherRepository->addTeacher(
                 [
                     'teacher_id' => 'TID' . $this->randString(10, true),
+                    'school_id'  => $school->school_id,
                     'name'       => 'TNAME' . $this->randString(10, true),
                     'email'      => $this->randString(10, false) . '@gmail.com',
                     'password'   => password_hash('password', PASSWORD_BCRYPT),
@@ -123,17 +132,29 @@ class SeedCommand
                     'updated_at' => Carbon::now(),
                 ]
             );
+            $offset++;
+            if ($offset == $count_school) {
+                $offset = 0;
+            }
         }
+
     }
 
-    public function seedStudent($num = 50000)
+    public function seedStudent($num = 10000)
     {
+        $count_school = count($this->schoolRepository->getSchools());
+        $offset = 0;
         // 產生學生
         $count = ($this->f3->get('GET.count')) ?? $num;
         for($i = 0; $i < $count; $i++) {
+            $school = $this->schoolRepository->getSchools([
+                'sql_limit_start' => $offset,
+                'sql_limit_end' => 1,
+            ], 'load');
             $this->studentRepository->addStudent(
                 [
                     'student_id'   => 'SID' . $this->randString(10, true),
+                    'school_id'  => $school->school_id,
                     'name'         => 'SNAME' . $this->randString(10, true),
                     'email'        => $this->randString(10, false) . '@gmail.com',
                     'password'     => password_hash('password', PASSWORD_BCRYPT),
@@ -142,17 +163,21 @@ class SeedCommand
                     'updated_at'   => Carbon::now(),
                 ]
             );
+            $offset++;
+            if ($offset == $count_school) {
+                $offset = 0;
+            }
         }
     }
 
-    public function seedSchool($num = 20)
+    public function seedSchool($num = 10)
     {
         $count = ($this->f3->get('GET.count')) ?? $num;
         for($i = 0; $i < $count; $i++) {
             $this->schoolRepository->addSchool(
                 [
                     'school_id'  => 'ID' . $this->randString(10, true),
-                    'name'       => 'SCHOOL' . $this->randString(10, true),
+                    'name'       => 'SCHOOL' . $this->randString(7, true),
                     'enable'     => 'Y',
                     'created_at' => Carbon::now(),
                     'updated_at' => Carbon::now(),
@@ -161,7 +186,7 @@ class SeedCommand
         }
     }
 
-    public function seedClass($num = 100)
+    public function seedClass($num = 20)
     {
         $count = ($this->f3->get('GET.count')) ?? $num;
         // Class 是隸屬在 School 底下故 School 不可無資料
@@ -176,7 +201,7 @@ class SeedCommand
                     [
                         'class_id'   => 'ID' . $this->randString(10, true),
                         'school_id'  => $school_v->school_id,
-                        'name'       => 'CLASS' . $this->randString(10, true),
+                        'name'       => 'CLASS' . $this->randString(7, true),
                         'enable'     => 'Y',
                         'created_at' => Carbon::now(),
                         'updated_at' => Carbon::now(),

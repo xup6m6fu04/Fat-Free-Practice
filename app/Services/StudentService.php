@@ -76,11 +76,11 @@ class StudentService
 
     public function editStudent($student_id, $args)
     {
-        if (!$args['student_id']) {
+        if (!$student_id) {
             throw new Exception('Student ID is Empty');
         }
 
-        $student = $this->getStudentByStudentId($args['student_id']);
+        $student = $this->getStudentByStudentId($student_id);
 
         if (!$student) {
             throw new Exception('Student does not exist');

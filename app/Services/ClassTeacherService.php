@@ -5,17 +5,20 @@ namespace App\Services;
 
 use App\Repositories\ClassTeacherRepository;
 use App\Repositories\SchoolRepository;
+use App\Repositories\TeacherRepository;
 use Exception;
 
 class ClassTeacherService
 {
     protected $classTeacherRepository;
     protected $schoolRepository;
+    protected $teacherRepository;
 
     public function __construct()
     {
         $this->classTeacherRepository = new ClassTeacherRepository();
         $this->schoolRepository = new SchoolRepository();
+        $this->teacherRepository = new TeacherRepository();
     }
 
     public function getByClassId($class_id)
@@ -32,7 +35,7 @@ class ClassTeacherService
         return $this->classTeacherRepository->getClassTeachers($args);
     }
 
-    public function getByTeacherId($teacher_id, $type = 'load')
+    public function getByTeacherId($teacher_id, $type = 'find')
     {
         if (!$teacher_id) {
             throw new Exception('Teacher ID Not Found');
@@ -41,7 +44,7 @@ class ClassTeacherService
         return $this->classTeacherRepository->getClassTeachers(['teacher_id' => $teacher_id], $type);
     }
 
-    public function addSchool($args)
+    public function addClassTeacher($args)
     {
         // 檢查內容
         foreach ($args as $key => $arg) {
@@ -65,5 +68,20 @@ class ClassTeacherService
         }
 
         return $this->classTeacherRepository->editClassTeacher($student_id, $args);
+    }
+
+    public function deleteClassTeacherByTeacherId($teacher_id)
+    {
+        if (!$teacher_id) {
+            throw new Exception('Teacher ID is Empty');
+        }
+
+        $teacher = $this->teacherRepository->getTeachers(['teacher_id' => $teacher_id]);
+
+        if (!$teacher) {
+            throw new Exception('Teacher Not Found');
+        }
+
+        $this->classTeacherRepository->deleteClassTeacher($teacher_id);
     }
 }

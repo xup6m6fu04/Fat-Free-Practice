@@ -5,6 +5,7 @@ namespace App\Repositories;
 
 use App\Teacher;
 use Carbon\Carbon;
+use Exception;
 
 class TeacherRepository
 {
@@ -12,6 +13,7 @@ class TeacherRepository
     {
         $teacher = new Teacher();
         $teacher->teacher_id = $args['teacher_id'];
+        $teacher->school_id  = $args['school_id'];
         $teacher->name       = $args['name'];
         $teacher->email      = $args['email'];
         $teacher->password   = $args['password'];
@@ -23,15 +25,29 @@ class TeacherRepository
         return $teacher;
     }
 
-    public function editTeacher($id, $args)
+    public function editTeacher($teacher_id, $args)
     {
-        $teacher = $this->getTeachers(['id' => $id], 'load');
+        $teacher = $this->getTeachers(['teacher_id' => $teacher_id], 'load');
 
-        $teacher->name         = $args['name'];
-        $teacher->email        = $args['email'];
-        // $teacher->password     = $args['password'];
-        $teacher->enable       = $args['enable'];
-        $teacher->updated_at   = Carbon::parse($args['updated_at'])->timestamp;
+        $school_id = $args['school_id'] ?? false;
+        $name      = $args['name']      ?? false;
+        $email     = $args['email']     ?? false;
+        $enable    = $args['enable']    ?? false;
+
+        if ($school_id) {
+            $teacher->school_id = $school_id;
+        }
+        if ($name) {
+            $teacher->name = $name;
+        }
+        if ($email) {
+            $teacher->email = $email;
+        }
+        if ($enable) {
+            $teacher->enable = $enable;
+        }
+
+        $teacher->updated_at = Carbon::parse($args['updated_at'])->timestamp;
         $teacher->save();
 
         return $teacher;
@@ -45,6 +61,7 @@ class TeacherRepository
 
         $id            = $args['id']            ?? false;
         $teacher_id    = $args['teacher_id']    ?? false;
+        $school_id     = $args['school_id']     ?? false;
         $name          = $args['name']          ?? false;
         $email         = $args['email']         ?? false;
         // $password      = $args['password']      ?? false;
@@ -63,6 +80,10 @@ class TeacherRepository
         if ($teacher_id) {
             $bind_arr[0] .= $connect . ' teacher_id '. $symbol .' :teacher_id ';
             $bind_arr[':teacher_id'] = $teacher_id;
+        }
+        if ($school_id) {
+            $bind_arr[0] .= $connect . ' school_id '. $symbol .' :school_id ';
+            $bind_arr[':school_id'] = $school_id;
         }
         if ($name) {
             $bind_arr[0] .= $connect . ' name ' . $symbol . ' :name ';

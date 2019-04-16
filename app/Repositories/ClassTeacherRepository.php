@@ -5,6 +5,7 @@ namespace App\Repositories;
 
 use App\ClassTeacher;
 use Carbon\Carbon;
+use Exception;
 
 class ClassTeacherRepository
 {
@@ -13,8 +14,8 @@ class ClassTeacherRepository
         $class_teacher = new ClassTeacher();
         $class_teacher->class_id     = $args['class_id'];
         $class_teacher->teacher_id   = $args['teacher_id'];
-        $class_teacher->created_at   = Carbon::parse($args['created_at'])->timestamp;
-        $class_teacher->updated_at   = Carbon::parse($args['updated_at'])->timestamp;
+        $class_teacher->created_at   = Carbon::now()->timestamp;
+        $class_teacher->updated_at   = Carbon::now()->timestamp;
         $class_teacher->save();
 
         return $class_teacher;
@@ -30,6 +31,14 @@ class ClassTeacherRepository
         $class_teacher->save();
 
         return $class_teacher;
+    }
+
+    public function deleteClassTeacher($teacher_id)
+    {
+        $class_teacher = $this->getClassTeachers(['teacher_id' => $teacher_id], 'find');
+        foreach ($class_teacher as $value) {
+            $value->erase();
+        }
     }
 
     public function getClassTeachers($args = [], $type = 'find', $key_word = false)

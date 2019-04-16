@@ -12,6 +12,7 @@ class StudentRepository
     {
         $student = new Student();
         $student->student_id   = $args['student_id'];
+        $student->school_id    = $args['school_id'];
         $student->name         = $args['name'];
         $student->email        = $args['email'];
         $student->password     = $args['password'];
@@ -27,10 +28,24 @@ class StudentRepository
     {
         $student = $this->getStudents(['student_id' => $student_id], 'load');
 
-        $student->name         = $args['name'];
-        $student->email        = $args['email'];
-        // $student->password     = $args['password'];
-        $student->enable       = $args['enable'];
+        $school_id = $args['school_id'] ?? false;
+        $name      = $args['name']      ?? false;
+        $email     = $args['email']     ?? false;
+        $enable    = $args['enable']    ?? false;
+
+        if ($school_id) {
+            $student->school_id = $school_id;
+        }
+        if ($name) {
+            $student->name = $name;
+        }
+        if ($email) {
+            $student->email = $email;
+        }
+        if ($enable) {
+            $student->enable = $enable;
+        }
+
         $student->updated_at   = Carbon::parse($args['updated_at'])->timestamp;
         $student->save();
 
@@ -45,6 +60,7 @@ class StudentRepository
 
         $id            = $args['id']            ?? false;
         $student_id    = $args['student_id']    ?? false;
+        $school_id     = $args['school_id']     ?? false;
         $name          = $args['name']          ?? false;
         $email         = $args['email']         ?? false;
         // $password      = $args['password']      ?? false;
@@ -63,6 +79,10 @@ class StudentRepository
         if ($student_id) {
             $bind_arr[0] .= $connect . ' student_id '. $symbol .' :student_id ';
             $bind_arr[':student_id'] = $student_id;
+        }
+        if ($school_id) {
+            $bind_arr[0] .= $connect . ' school_id '. $symbol .' :school_id ';
+            $bind_arr[':school_id'] = $school_id;
         }
         if ($name) {
             $bind_arr[0] .= $connect . ' name ' . $symbol . ' :name ';

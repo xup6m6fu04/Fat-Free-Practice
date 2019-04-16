@@ -135,7 +135,7 @@ class ClassRepository
 
         // SQL Params
         $limit_start  = $args['sql_limit_start']  ?? 0;
-        $limit_end    = $args['sql_limit_end']    ?? 10;
+        $limit_end    = $args['sql_limit_end']    ?? 999999;
         $order        = $args['sql_order']        ?? 'created_at';
         $sort         = $args['sql_sort']         ?? 'desc';
 

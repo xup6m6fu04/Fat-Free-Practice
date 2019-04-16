@@ -159,26 +159,34 @@ class TeacherController extends Controller
             }
 
             $class_teacher = $this->classTeacherService->getByTeacherId($teacher_id, 'find');
-            $string = '';
-            foreach ($class_teacher as $ctv) {
-                $string .= "'" . $ctv->class_id . "',";
+            if (!$class_teacher) {
+                $class = [];
+            } else {
+                $string = '';
+                foreach ($class_teacher as $ctv) {
+                    $string .= "'" . $ctv->class_id . "',";
+                }
+                $string = substr($string, 0, -1);
+
+                $class = $this->classService->getClassInClassId($string);
+                if (count($class) > 0) {
+                    $school_id = $class[0]['school_id'];
+                }
             }
-            $string = substr($string, 0, -1);
 
-            $class = $this->classService->getClassInClassId($string);
-            echo "<pre>"; print_r($class); echo "</pre>"; exit;
+            $school = $this->schoolService->getSchoolBySchoolId($school_id);
+            $all_school = $this->schoolService->getAllSchools();
+            $all_class = $this->classService->getAllClasses();
 
-//            $school = $this->schoolService->getSchoolBySchoolId($class->school_id);
-//            $all_class = $this->classService->getClassBySchoolId($school->school_id);
-//
-//            return_json([
-//                'type'          => 'success',
-//                'student'       => to_Array($student),
-//                'class_student' => to_Array($class_student),
-//                'class'         => to_Array($class),
-//                'school'        => to_Array($school),
-//                'all_class'     => to_Array_two($all_class)
-//            ]);
+            return_json([
+                'type'          => 'success',
+                'teacher'       => to_Array($teacher),
+                'class_teacher' => to_Array_two($class_teacher),
+                'class'         => to_Array_two($class),
+                'school'        => to_Array($school),
+                'all_school'    => to_Array_two($all_school),
+                'all_class'     => to_Array_two($all_class)
+            ]);
 
         } catch (Exception $ex) {
 

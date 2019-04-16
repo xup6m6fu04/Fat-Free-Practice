@@ -161,7 +161,7 @@ class StudentController extends Controller
 
             $class_student = $this->classStudentService->getByStudentId($student_id);
             $class = $this->classService->getClassByClassId($class_student->class_id);
-            $school = $this->schoolService->getSchoolBySchoolId($class->school_id);
+            $school = $this->schoolService->getSchoolBySchoolId($student->school_id);
             $all_class = $this->classService->getClassBySchoolId($school->school_id);
 
             return_json([

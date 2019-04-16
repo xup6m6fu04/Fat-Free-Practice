@@ -50,7 +50,7 @@ class TeacherService
         return $this->teacherRepository->getTeachers($args, 'find', $key_word);
     }
 
-    public function getTeacherByTeacherId($teacher_id, $type = 'find')
+    public function getTeacherByTeacherId($teacher_id, $type = 'load')
     {
         if (!$teacher_id) {
             throw new Exception('Teacher ID is empty');
@@ -76,11 +76,11 @@ class TeacherService
 
     public function editTeacher($teacher_id, $args)
     {
-        if (!$args['teacher_id']) {
+        if (!$teacher_id) {
             throw new Exception('Teacher ID is Empty');
         }
 
-        $teacher = $this->getTeacherByTeacherId($args['teacher_id']);
+        $teacher = $this->getTeacherByTeacherId($teacher_id);
 
         if (!$teacher) {
             throw new Exception('Teacher does not exist');
