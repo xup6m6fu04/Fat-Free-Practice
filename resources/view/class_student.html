@@ -72,9 +72,9 @@
                                     </thead>
                                     <tbody>
                                     <tr>
-                                        <td>{{ @school->id }}</td>
+                                        <td>{{ @school->school_id }}</td>
                                         <td>{{ @school->name }}</td>
-                                        <input type="hidden" id="school_id" value="{{ @school->id }}">
+                                        <input type="hidden" id="school_id" value="{{ @school->school_id }}">
                                     </tr>
                                     </tbody>
                                 </table>
@@ -105,9 +105,9 @@
                                     </thead>
                                     <tbody>
                                     <tr>
-                                        <td>{{ @class->id }}</td>
+                                        <td>{{ @class->class_id }}</td>
                                         <td>{{ @class->name }}</td>
-                                        <input type="hidden" id="class_id" value="{{ @class->id }}">
+                                        <input type="hidden" id="class_id" value="{{ @class->class_id }}">
                                     </tr>
                                     </tbody>
                                 </table>
@@ -183,7 +183,7 @@
                                         <td>{{ @class_student->created_at }}</td>
                                         <td>{{ @class_student->updated_at }}</td>
                                         <td>
-                                            <a href="javascript:void(0)" data-id="{{ @class_student->student_id }}" id="edit_class_student_modal" data-target="#editModal" data-toggle="modal" class="btn btn-sm btn-icon btn-pure btn-default on-default edit-row" data-toggle="tooltip" data-original-title="Edit"><i class="icon wb-edit" aria-hidden="true"></i></a>
+                                            <a href="javascript:void(0)" data-student_id="{{ @class_student->student_id }}" id="edit_class_student_modal" data-target="#editModal" data-toggle="modal" class="btn btn-sm btn-icon btn-pure btn-default on-default edit-row" data-toggle="tooltip" data-original-title="Edit"><i class="icon wb-edit" aria-hidden="true"></i></a>
                                             <a href="javascript:void(0)" class="btn btn-sm btn-icon btn-pure btn-default on-default remove-row" data-toggle="tooltip" data-original-title="Remove"><i class="icon wb-trash" aria-hidden="true"></i></a>
                                         </td>
                                     </tr>
@@ -259,20 +259,20 @@
     });
 
     $(document).on('click', '#edit_class_student_modal', function(){
-        let id = $(this).data('id');
+        let student_id = $(this).data('student_id');
         $.ajax({
             type: "post",
-            url: "/api/get-student-by-id",
+            url: "/api/get-student-by-student-id",
             dataType: "json",
             data: {
-                id: id,
+                student_id: student_id,
             },
             success: function (result) {
                 if (result.type === 'success') {
 
                     $('#edit_name').val(result.student.name);
                     $('#edit_email').val(result.student.email);
-                    $('#edit_class_student').attr('data-id', result.student.id);
+                    $('#edit_class_student').attr('data-student_id', result.student.student_id);
 
                     $('input[name=edit_enable]').each(function(){
                         let _this = $(this);
@@ -301,10 +301,10 @@
     $(document).on('click', '#edit_class_student', function () {
 
         let edit_data_arr = {
-            'edit_id' : $(this).data('id'),
-            'edit_name' : $('#edit_name').val(),
-            'edit_email' : $('#edit_email').val(),
-            'edit_enable' : $('input[name=edit_enable]:checked').val(),
+            'edit_student_id' : $(this).data('student_id'),
+            'edit_name'       : $('#edit_name').val(),
+            'edit_email'      : $('#edit_email').val(),
+            'edit_enable'     : $('input[name=edit_enable]:checked').val(),
         };
 
         for (let key in edit_data_arr) {
@@ -327,7 +327,7 @@
             url: "/api/edit-student",
             dataType: "json",
             data: {
-                id: edit_data_arr.edit_id,
+                student_id: edit_data_arr.edit_student_id,
                 name: edit_data_arr.edit_name,
                 email: edit_data_arr.edit_email,
                 enable: edit_data_arr.edit_enable,

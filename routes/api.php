@@ -18,3 +18,6 @@ $f3->route('POST /api/get-class-by-class-id', 'App\Controllers\ClassController->
 $f3->route('POST /api/get-class-by-school-id', 'App\Controllers\ClassController->getClassBySchoolId');
 
 $f3->route('POST /api/get-class-and-school-by-teacher-id', 'App\Controllers\TeacherController->getClassAndSchoolByTeacherId');
+
+
+$f3->route('POST /api/test-student-repository', 'App\Repositories\StudentRepository->getStudentsInStudentId');

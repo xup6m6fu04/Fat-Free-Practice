@@ -56,8 +56,8 @@ class ClassStudentRepository
             $bind_arr[':id'] = $id;
         }
         if ($class_id) {
-            $bind_arr[0] .= $connect . '$ class_id ' . $symbol . '$ :class_id ';
-            $bind_arr['$:class_id'] = $class_id;
+            $bind_arr[0] .= $connect . ' class_id ' . $symbol . ' :class_id ';
+            $bind_arr[':class_id'] = $class_id;
         }
         if ($student_id) {
             $bind_arr[0] .= $connect . ' student_id ' . $symbol . ' :student_id ';

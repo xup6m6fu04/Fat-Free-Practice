@@ -169,12 +169,9 @@ class TeacherController extends Controller
                 $string = substr($string, 0, -1);
 
                 $class = $this->classService->getClassInClassId($string);
-                if (count($class) > 0) {
-                    $school_id = $class[0]['school_id'];
-                }
             }
 
-            $school = $this->schoolService->getSchoolBySchoolId($school_id);
+            $school = $this->schoolService->getSchoolBySchoolId($teacher->school_id);
             $all_school = $this->schoolService->getAllSchools();
             $all_class = $this->classService->getAllClasses();
 

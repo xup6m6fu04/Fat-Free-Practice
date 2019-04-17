@@ -4,10 +4,23 @@
 namespace App\Repositories;
 
 use App\Student;
+use App\Traits\LoggerTrait;
 use Carbon\Carbon;
 
 class StudentRepository
 {
+    use LoggerTrait;
+
+    protected $db;
+    protected $f3;
+
+    public function __construct()
+    {
+        global $f3;
+        $this->f3 = $f3;
+        $this->db = $f3->get('db');
+    }
+
     public function addStudent($args)
     {
         $student = new Student();
@@ -46,10 +59,27 @@ class StudentRepository
             $student->enable = $enable;
         }
 
-        $student->updated_at   = Carbon::parse($args['updated_at'])->timestamp;
+        $student->updated_at = Carbon::now()->timestamp;
         $student->save();
 
         return $student;
+    }
+
+    public function getStudentsInStudentId($string, $key_word = false)
+    {
+        $student = new Student();
+        $connect = '';
+
+        if ($key_word) {
+            $connect = "  AND ( 
+            student_id like '$key_word' OR 
+            name       like '$key_word' OR 
+            email      like '$key_word' OR 
+            enable     like '$key_word' 
+            )";
+        }
+
+        return $student->find("student_id IN ( " . $string . " ) $connect");
     }
 
     public function getStudents($args = [], $type = 'find', $key_word = false)

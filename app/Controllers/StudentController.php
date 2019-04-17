@@ -99,7 +99,6 @@ class StudentController extends Controller
             $args['email']        = ($this->f3->get('POST.email'))        ?? false;
             // $args['password']     = ($this->f3->get('POST.password'))     ?? false;
             $args['enable']       = ($this->f3->get('POST.enable'))       ?? false;
-            $args['updated_at']   = Carbon::now();
 
             $this->studentService->editStudent($args['student_id'], $args);
 

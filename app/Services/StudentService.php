@@ -59,6 +59,11 @@ class StudentService
         return $this->studentRepository->getStudents(['student_id' => $student_id], $type);
     }
 
+    public function getStudentsInStudentId($string, $key_word)
+    {
+        return $this->studentRepository->getStudentsInStudentId($string, $key_word);
+    }
+
     public function addStudent($args)
     {
         // 檢查內容

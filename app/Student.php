@@ -13,4 +13,9 @@ class Student extends Mapper
         global $f3;
         parent::__construct($f3->get('db'), $this->table);
     }
+
+    public function getTable()
+    {
+        return $this->table;
+    }
 }

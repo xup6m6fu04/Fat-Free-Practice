@@ -14,20 +14,20 @@ class SchoolRepository
         $school->school_id    = $args['school_id'];
         $school->name         = $args['name'];
         $school->enable       = $args['enable'];
-        $school->created_at   = Carbon::parse($args['created_at'])->timestamp;
-        $school->updated_at   = Carbon::parse($args['updated_at'])->timestamp;
+        $school->created_at   = Carbon::now()->timestamp;
+        $school->updated_at   = Carbon::now()->timestamp;
         $school->save();
 
         return $school;
     }
 
-    public function editSchool($id, $args)
+    public function editSchool($school_id, $args)
     {
-        $school = $this->getSchools(['id' => $id], 'load');
+        $school = $this->getSchools(['school_id' => $school_id], 'load');
 
         $school->name         = $args['name'];
         $school->enable       = $args['enable'];
-        $school->updated_at   = Carbon::parse($args['updated_at'])->timestamp;
+        $school->updated_at   = Carbon::now()->timestamp;
         $school->save();
 
         return $school;

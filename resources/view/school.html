@@ -27,8 +27,8 @@
                 <div class="modal-body">
                     <div class="row" style="padding-top: 20px">
                         <div class="col-xl-12 form-group">
-                            <label class="form-control-label" for="id">ID</label>
-                            <input type="text" class="form-control" id="id" name="id" placeholder="id" required="">
+                            <label class="form-control-label" for="school_id">School ID</label>
+                            <input type="text" class="form-control" id="school_id" name="school_id" placeholder="school_id" required="">
                             <div class="invalid-feedback"></div>
                         </div>
                         <div class="col-xl-12 form-group">
@@ -145,13 +145,13 @@
                                 <tbody>
                                 <repeat group="{{ @schools }}" value="{{ @school }}">
                                     <tr>
-                                        <td><a href="class?school_id={{ @school->id }}">{{ @school->id }}</a></td>
+                                        <td><a href="class?school_id={{ @school->school_id }}">{{ @school->school_id }}</a></td>
                                         <td>{{ @school->name }}</td>
                                         <td>{{ @school->enable }}</td>
                                         <td>{{ @school->created_at }}</td>
                                         <td>{{ @school->updated_at }}</td>
                                         <td>
-                                            <a href="javascript:void(0)" data-id="{{ @school->id }}" id="edit_school_modal" data-target="#editModal" data-toggle="modal" class="btn btn-sm btn-icon btn-pure btn-default on-default edit-row" data-toggle="tooltip" data-original-title="Edit"><i class="icon wb-edit" aria-hidden="true"></i></a>
+                                            <a href="javascript:void(0)" data-school_id="{{ @school->school_id }}" id="edit_school_modal" data-target="#editModal" data-toggle="modal" class="btn btn-sm btn-icon btn-pure btn-default on-default edit-row" data-toggle="tooltip" data-original-title="Edit"><i class="icon wb-edit" aria-hidden="true"></i></a>
                                             <a href="javascript:void(0)" class="btn btn-sm btn-icon btn-pure btn-default on-default remove-row" data-toggle="tooltip" data-original-title="Remove"><i class="icon wb-trash" aria-hidden="true"></i></a>
                                         </td>
                                     </tr>
@@ -227,21 +227,19 @@
     });
 
     $(document).on('click', '#edit_school_modal', function(){
-        let id = $(this).data('id');
+        let school_id = $(this).data('school_id');
         $.ajax({
             type: "post",
-            url: "/api/get-school-by-id",
+            url: "/api/get-school-by-school-id",
             dataType: "json",
             data: {
-                id: id,
+                school_id: school_id,
             },
             success: function (result) {
                 if (result.type === 'success') {
 
-                    $('#edit_school_id').val(result.school.school_id);
                     $('#edit_name').val(result.school.name);
-                    $('#edit_email').val(result.school.email);
-                    $('#edit_school').attr('data-id', result.school.id);
+                    $('#edit_school').attr('data-school_id', result.school.school_id);
 
                     $('input[name=edit_enable]').each(function(){
                         let _this = $(this);
@@ -270,9 +268,9 @@
     $(document).on('click', '#edit_school', function () {
 
         let edit_data_arr = {
-            'edit_id' : $(this).data('id'),
-            'edit_name' : $('#edit_name').val(),
-            'edit_enable' : $('input[name=edit_enable]:checked').val(),
+            'edit_school_id' : $(this).data('school_id'),
+            'edit_name'      : $('#edit_name').val(),
+            'edit_enable'    : $('input[name=edit_enable]:checked').val(),
         };
 
         for (let key in edit_data_arr) {
@@ -295,7 +293,7 @@
             url: "/api/edit-school",
             dataType: "json",
             data: {
-                id: edit_data_arr.edit_id,
+                school_id: edit_data_arr.edit_school_id,
                 name: edit_data_arr.edit_name,
                 enable: edit_data_arr.edit_enable,
             },
@@ -330,7 +328,7 @@
     $(document).on('click', '#add_school', function () {
 
         let data_arr = {
-            'id'           : $('#id').val(),
+            'school_id'    : $('#school_id').val(),
             'name'         : $('#name').val(),
             'enable'       : $('input[name=enable]:checked').val()
         };
@@ -355,7 +353,7 @@
             url: "/api/add-school",
             dataType: "json",
             data: {
-                id:           data_arr.id,
+                school_id:    data_arr.school_id,
                 name:         data_arr.name,
                 enable:       data_arr.enable
             },

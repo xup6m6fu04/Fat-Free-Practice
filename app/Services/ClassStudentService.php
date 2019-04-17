@@ -18,13 +18,20 @@ class ClassStudentService
         $this->schoolRepository = new SchoolRepository();
     }
 
-    public function getByClassId($class_id)
+    public function getByClassId($class_id, $key_word = false)
     {
         if (!$class_id) {
             throw new Exception('Class ID Not Found');
         }
 
-        return $this->classStudentRepository->getClassStudents(['class_id' => $class_id]);
+        if ($key_word) {
+            $args['class_id']   = $key_word;
+            $args['teacher_id'] = $key_word;
+        } else {
+            $args['class_id'] = $class_id;
+        }
+
+        return $this->classStudentRepository->getClassStudents($args, 'find', $key_word);
     }
 
     public function getByParams($args)

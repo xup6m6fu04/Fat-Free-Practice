@@ -29,8 +29,8 @@ class ClassRepository
         $class->school_id    = $args['school_id'];
         $class->name         = $args['name'];
         $class->enable       = $args['enable'];
-        $class->created_at   = Carbon::parse($args['created_at'])->timestamp;
-        $class->updated_at   = Carbon::parse($args['updated_at'])->timestamp;
+        $class->created_at   = Carbon::now()->timestamp;
+        $class->updated_at   = Carbon::now()->timestamp;
         $class->save();
 
         return $class;
@@ -51,9 +51,7 @@ class ClassRepository
     public function getClassesInClassId($string)
     {
         $classes = new Classes();
-        $sql = " SELECT * from " . $classes->getTable() . " WHERE `class_id` IN ( " . $string . " ) ORDER BY `created_at` desc ";
-        $res = $this->db->exec($sql);
-        return $res;
+        return $classes->find("class_id IN ( " . $string . " )");
     }
 
     public function getClassesBySchoolId($args = [], $type = 'find', $key_word = false)

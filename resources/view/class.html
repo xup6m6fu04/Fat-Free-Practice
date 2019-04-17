@@ -27,8 +27,8 @@
                 <div class="modal-body">
                     <div class="row" style="padding-top: 20px">
                         <div class="col-xl-12 form-group">
-                            <label class="form-control-label" for="id">ID</label>
-                            <input type="text" class="form-control" id="id" name="id" placeholder="id" required="">
+                            <label class="form-control-label" for="class_id">ID</label>
+                            <input type="text" class="form-control" id="class_id" name="class_id" placeholder="class_id" required="">
                             <div class="invalid-feedback"></div>
                         </div>
                         <div class="col-xl-12 form-group">
@@ -107,9 +107,9 @@
                                     </thead>
                                     <tbody>
                                     <tr>
-                                        <td>{{ @school->id }}</td>
+                                        <td>{{ @school->school_id }}</td>
                                         <td>{{ @school->name }}</td>
-                                        <input type="hidden" id="school_id" value="{{ @school->id }}">
+                                        <input type="hidden" id="school_id" value="{{ @school->school_id }}">
                                     </tr>
                                     </tbody>
                                 </table>
@@ -166,12 +166,12 @@
                             <table class="table table-bordered table-hover table-striped dataTable no-footer" cellspacing="0" id="exampleAddRow" role="grid" aria-describedby="exampleAddRow_info">
                                 <thead>
                                 <tr role="row">
-                                    <th>ID</th>
-                                    <th>School_id</th>
+                                    <th>Class ID</th>
+                                    <th>School ID</th>
                                     <th>Name</th>
                                     <th>Enable</th>
-                                    <th>Created_at</th>
-                                    <th>Updated_at</th>
+                                    <th>Created At</th>
+                                    <th>Updated At</th>
                                     <th>Teacher</th>
                                     <th>Student</th>
                                     <th>Edit</th>
@@ -180,20 +180,20 @@
                                 <tbody>
                                 <repeat group="{{ @classes }}" value="{{ @class }}">
                                     <tr>
-                                        <td>{{ @class->id }}</td>
+                                        <td>{{ @class->class_id }}</td>
                                         <td>{{ @class->school_id }}</td>
                                         <td>{{ @class->name }}</td>
                                         <td>{{ @class->enable }}</td>
                                         <td>{{ @class->created_at }}</td>
                                         <td>{{ @class->updated_at }}</td>
                                         <td>
-                                            <a href="class-teachers?class_id={{ @class->id }}"><span class="badge badge-pill badge-dark">Teacher</span></a>
+                                            <a href="class-teachers?class_id={{ @class->class_id }}"><span class="badge badge-pill badge-dark">Teacher</span></a>
                                         </td>
                                         <td>
-                                            <a href="class-students?class_id={{ @class->id }}"><span class="badge badge-pill badge-success">Student</span></a>
+                                            <a href="class-students?class_id={{ @class->class_id }}"><span class="badge badge-pill badge-success">Student</span></a>
                                         </td>
                                         <td>
-                                            <a href="javascript:void(0)" data-id="{{ @class->id }}" id="edit_class_modal" data-target="#editModal" data-toggle="modal" class="btn btn-sm btn-icon btn-pure btn-default on-default edit-row" data-toggle="tooltip" data-original-title="Edit"><i class="icon wb-edit" aria-hidden="true"></i></a>
+                                            <a href="javascript:void(0)" data-class_id="{{ @class->class_id }}" id="edit_class_modal" data-target="#editModal" data-toggle="modal" class="btn btn-sm btn-icon btn-pure btn-default on-default edit-row" data-toggle="tooltip" data-original-title="Edit"><i class="icon wb-edit" aria-hidden="true"></i></a>
                                             <a href="javascript:void(0)" class="btn btn-sm btn-icon btn-pure btn-default on-default remove-row" data-toggle="tooltip" data-original-title="Remove"><i class="icon wb-trash" aria-hidden="true"></i></a>
                                         </td>
                                     </tr>
@@ -269,20 +269,20 @@
     });
 
     $(document).on('click', '#edit_class_modal', function(){
-        let id = $(this).data('id');
+        let class_id = $(this).data('class_id');
         $.ajax({
             type: "post",
-            url: "/api/get-class-by-id",
+            url: "/api/get-class-by-class-id",
             dataType: "json",
             data: {
-                id: id,
+                class_id: class_id,
             },
             success: function (result) {
                 if (result.type === 'success') {
 
                     $('#edit_school_id').val(result.class.school_id);
                     $('#edit_name').val(result.class.name);
-                    $('#edit_class').attr('data-id', result.class.id);
+                    $('#edit_class').attr('data-class_id', result.class.class_id);
 
                     $('input[name=edit_enable]').each(function(){
                         let _this = $(this);
@@ -311,7 +311,7 @@
     $(document).on('click', '#edit_class', function () {
 
         let edit_data_arr = {
-            'edit_id' : $(this).data('id'),
+            'edit_class_id' : $(this).data('class_id'),
             'edit_name' : $('#edit_name').val(),
             'edit_enable' : $('input[name=edit_enable]:checked').val(),
         };
@@ -336,7 +336,7 @@
             url: "/api/edit-class",
             dataType: "json",
             data: {
-                id: edit_data_arr.edit_id,
+                class_id: edit_data_arr.edit_class_id,
                 school_id: $('#school_id').val(),
                 name: edit_data_arr.edit_name,
                 enable: edit_data_arr.edit_enable,
@@ -372,7 +372,7 @@
     $(document).on('click', '#add_class', function () {
 
         let data_arr = {
-            'id'           : $('#id').val(),
+            'class_id'     : $('#class_id').val(),
             'school_id'    : $('#school_id').val(),
             'name'         : $('#name').val(),
             'enable'       : $('input[name=enable]:checked').val()
@@ -398,11 +398,9 @@
             url: "/api/add-class",
             dataType: "json",
             data: {
-                id:           data_arr.id,
+                class_id:     data_arr.class_id,
                 school_id:    data_arr.school_id,
                 name:         data_arr.name,
-                email:        data_arr.email,
-                password:     data_arr.password,
                 enable:       data_arr.enable
             },
             success: function (result) {

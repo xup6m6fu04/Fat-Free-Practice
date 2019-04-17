@@ -56,8 +56,6 @@ class SchoolController extends Controller
             $args['school_id']    = ($this->f3->get('POST.school_id'))    ?? false;
             $args['name']         = ($this->f3->get('POST.name'))         ?? false;
             $args['enable']       = ($this->f3->get('POST.enable'))       ?? false;
-            $args['created_at']   = Carbon::now();
-            $args['updated_at']   = Carbon::now();
 
             // 新增資料
             $this->schoolService->addSchool($args);
@@ -84,9 +82,8 @@ class SchoolController extends Controller
             $args['school_id']    = ($this->f3->get('POST.school_id'))    ?? false;
             $args['name']         = ($this->f3->get('POST.name'))         ?? false;
             $args['enable']       = ($this->f3->get('POST.enable'))       ?? false;
-            $args['updated_at']   = Carbon::now();
 
-            $this->schoolService->editSchool($args['id'], $args);
+            $this->schoolService->editSchool($args['school_id'], $args);
 
             return_json([
                 'type' => 'success'
@@ -104,11 +101,11 @@ class SchoolController extends Controller
 
     }
 
-    public function getSchoolById()
+    public function getSchoolBySchoolId()
     {
         try {
             $school_id = ($this->f3->get('POST.school_id')) ?? false;
-            $school = $this->schoolService->getSchoolById($school_id, 'load');
+            $school = $this->schoolService->getSchoolBySchoolId($school_id, 'load');
 
             if (!$school) {
                 throw new Exception('School Not Found');

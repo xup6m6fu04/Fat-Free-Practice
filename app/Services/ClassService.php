@@ -99,20 +99,20 @@ class ClassService
             // TODO 檢查格式
         }
 
-        if (!$this->schoolRepository->getSchools(['id' => $args['school_id']])) {
+        if (!$this->schoolRepository->getSchools(['school_id' => $args['school_id']])) {
             throw new Exception('此班級無隸屬的學校');
         }
 
         return $this->classRepository->addClass($args);
     }
 
-    public function editClass($id, $args)
+    public function editClass($class_id, $args)
     {
-        if (!$args['id']) {
-            throw new Exception('ID is Empty');
+        if (!$args['class_id']) {
+            throw new Exception('Class ID is Empty');
         }
 
-        $class = $this->getClassById($args['id']);
+        $class = $this->getClassByClassId($args['class_id']);
 
         if (!$class) {
             throw new Exception('Class does not exist');
