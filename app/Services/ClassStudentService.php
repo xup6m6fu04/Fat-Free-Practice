@@ -48,7 +48,7 @@ class ClassStudentService
         return $this->classStudentRepository->getClassStudents(['student_id' => $student_id], $type);
     }
 
-    public function addSchool($args)
+    public function addClassStudent($args)
     {
         // 檢查內容
         foreach ($args as $key => $arg) {

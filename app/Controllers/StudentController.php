@@ -69,11 +69,50 @@ class StudentController extends Controller
             $args['email']        = ($this->f3->get('POST.email'))        ?? false;
             $args['password']     = ($this->f3->get('POST.password'))     ?? false;
             $args['enable']       = ($this->f3->get('POST.enable'))       ?? false;
-            $args['created_at']   = Carbon::now();
-            $args['updated_at']   = Carbon::now();
 
             // 新增資料
             $this->studentService->addStudent($args);
+
+            return_json(['type' => 'success']);
+
+        } catch (Exception $ex) {
+            $this->Log($ex, Logger::ERROR);
+
+            return_json([
+                'type' => 'error',
+                'message' => $ex->getMessage()
+            ]);
+
+        }
+    }
+
+    public function addStudentWithSchoolAndClass()
+    {
+        try {
+            // 新增一個學生 含有 school and class 需檢查
+            $args = [];
+            $args['student_id']   = ($this->f3->get('POST.student_id'))   ?? false;
+            $args['school_id']    = ($this->f3->get('POST.school_id'))    ?? false;
+            $args['class_id']     = ($this->f3->get('POST.class_id'))     ?? false;
+            $args['name']         = ($this->f3->get('POST.name'))         ?? false;
+            $args['email']        = ($this->f3->get('POST.email'))        ?? false;
+            $args['password']     = ($this->f3->get('POST.password'))     ?? false;
+            $args['enable']       = ($this->f3->get('POST.enable'))       ?? false;
+
+            // class
+            $class = $this->classService->getClassByClassId($args['class_id']);
+            if (!$class) {
+                throw new Exception('Class Not Found');
+            }
+            if ($class->school_id != $args['school_id']) {
+                throw new Exception('Class and School Not Match');
+            }
+
+            // 新增學生
+            $this->studentService->addStudent($args);
+
+            // 搭配班級
+            $this->classStudentService->addClassStudent($args);
 
             return_json(['type' => 'success']);
 

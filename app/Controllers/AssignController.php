@@ -72,7 +72,7 @@ class AssignController extends Controller
             if ($class_student) {
                 $this->classStudentService->editClassStudent($student_id, ['class_id' => $class_id]);
             } else {
-                $this->classStudentService->addSchool([
+                $this->classStudentService->addClassStudent([
                     'class_id' => $class_id,
                     'student_id' => $student_id
                 ]);

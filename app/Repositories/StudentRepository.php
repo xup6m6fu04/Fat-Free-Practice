@@ -30,8 +30,8 @@ class StudentRepository
         $student->email        = $args['email'];
         $student->password     = $args['password'];
         $student->enable       = $args['enable'];
-        $student->created_at   = Carbon::parse($args['created_at'])->timestamp;
-        $student->updated_at   = Carbon::parse($args['updated_at'])->timestamp;
+        $student->created_at   = Carbon::now()->timestamp;
+        $student->updated_at   = Carbon::now()->timestamp;
         $student->save();
 
         return $student;
